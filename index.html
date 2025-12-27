@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Obscura | Links</title>
-<!-- Font Awesome for social media icons -->
+<title>Obscura | Editable Link Page</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
-  /* General Page Styling */
   body {
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #000000, #2b2b2b);
@@ -16,34 +13,19 @@
     text-align: center;
     padding: 50px 20px;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
-
-  /* Profile Image */
-  img {
+  #profile-img {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    margin-bottom: 20px;
     border: 4px solid white;
     object-fit: cover;
+    margin-bottom: 20px;
+    cursor: pointer;
   }
-
-  /* Page Title */
-  h1 {
-    margin-bottom: 5px;
-    font-size: 2em;
+  h1, p.subtitle {
+    cursor: pointer;
   }
-
-  p.subtitle {
-    color: #aaa;
-    margin-bottom: 30px;
-    font-size: 1.1em;
-  }
-
-  /* Buttons / Links */
   .link-btn {
     display: flex;
     align-items: center;
@@ -58,75 +40,129 @@
     font-weight: bold;
     border-radius: 30px;
     transition: all 0.3s ease;
+    cursor: move;
   }
-
   .link-btn i {
     margin-right: 10px;
-    font-size: 20px;
   }
-
   .link-btn:hover {
     transform: scale(1.05);
     background: #ddd;
   }
-
-  /* Text blocks under links */
   .text-block {
     max-width: 320px;
-    margin: 15px auto;
+    margin: 5px auto 15px auto;
     color: #ccc;
     font-size: 14px;
+    cursor: pointer;
   }
-
-  /* Extra Images / Videos */
-  .extra-media {
-    margin: 20px auto;
-    max-width: 320px;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  /* Responsive */
-  @media (max-width: 400px) {
-    h1 {
-      font-size: 1.5em;
-    }
-    .link-btn {
-      font-size: 16px;
-      padding: 12px 18px;
-    }
+  #add-link-btn {
+    margin-top: 20px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: none;
+    background: #555;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
   }
 </style>
 </head>
 <body>
 
 <!-- Profile -->
-<img src="profile.jpg" alt="Profile photo">
-<h1>Obscura</h1>
-<p class="subtitle">Find me online</p>
+<img id="profile-img" src="profile.jpg" alt="Profile Photo">
+<h1 id="page-title" contenteditable="true">Obscura</h1>
+<p class="subtitle" contenteditable="true">Find me online</p>
 
-<!-- Social Links -->
-<a href="https://www.instagram.com/obscura001/" class="link-btn" target="_blank">
-  <i class="fab fa-instagram"></i>Instagram
-</a>
-<div class="text-block">Check out my photos and stories!</div>
+<!-- Links Container -->
+<div id="links-container">
+  <div class="link-item">
+    <a href="https://www.instagram.com/obscura001/" class="link-btn" target="_blank">
+      <i class="fab fa-instagram"></i><span contenteditable="true">Instagram</span>
+    </a>
+    <div class="text-block" contenteditable="true">Check out my photos and stories!</div>
+  </div>
 
-<a href="https://www.tiktok.com/@obscura097" class="link-btn" target="_blank">
-  <i class="fab fa-tiktok"></i>TikTok
-</a>
-<div class="text-block">Watch my latest videos!</div>
+  <div class="link-item">
+    <a href="https://www.tiktok.com/@obscura097" class="link-btn" target="_blank">
+      <i class="fab fa-tiktok"></i><span contenteditable="true">TikTok</span>
+    </a>
+    <div class="text-block" contenteditable="true">Watch my latest videos!</div>
+  </div>
 
-<a href="https://www.pinterest.com/obscura001/" class="link-btn" target="_blank">
-  <i class="fab fa-pinterest"></i>Pinterest
-</a>
-<div class="text-block">Pinning all my favorite ideas.</div>
+  <div class="link-item">
+    <a href="https://www.pinterest.com/obscura001/" class="link-btn" target="_blank">
+      <i class="fab fa-pinterest"></i><span contenteditable="true">Pinterest</span>
+    </a>
+    <div class="text-block" contenteditable="true">Pinning all my favorite ideas.</div>
+  </div>
+</div>
 
-<!-- Extra media example (image) -->
-<img src="example.jpg" alt="Extra media" class="extra-media">
+<button id="add-link-btn">+ Add New Link</button>
 
-<!-- Extra media example (video) -->
-<iframe class="extra-media" width="320" height="180" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-title="YouTube video" frameborder="0" allowfullscreen></iframe>
+<script>
+  // Change profile image on click
+  document.getElementById('profile-img').onclick = () => {
+    const newImg = prompt('Enter image URL:');
+    if(newImg) document.getElementById('profile-img').src = newImg;
+  };
+
+  // Add new link dynamically
+  document.getElementById('add-link-btn').onclick = () => {
+    const url = prompt('Enter URL:');
+    const name = prompt('Enter link name:');
+    if(url && name){
+      const container = document.getElementById('links-container');
+      const div = document.createElement('div');
+      div.classList.add('link-item');
+      div.innerHTML = `
+        <a href="${url}" class="link-btn" target="_blank">
+          <i class="fas fa-link"></i><span contenteditable="true">${name}</span>
+        </a>
+        <div class="text-block" contenteditable="true">Description here...</div>
+      `;
+      container.appendChild(div);
+    }
+  };
+
+  // Make links draggable for ordering
+  let dragSrcEl = null;
+  function handleDragStart(e) {
+    dragSrcEl = this;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+  }
+  function handleDragOver(e) {
+    if(e.preventDefault) e.preventDefault();
+    return false;
+  }
+  function handleDrop(e) {
+    if(e.stopPropagation) e.stopPropagation();
+    if(dragSrcEl != this) {
+      dragSrcEl.innerHTML = this.innerHTML;
+      this.innerHTML = e.dataTransfer.getData('text/html');
+    }
+    return false;
+  }
+  function addDragEvents(item){
+    item.setAttribute('draggable','true');
+    item.addEventListener('dragstart', handleDragStart, false);
+    item.addEventListener('dragover', handleDragOver, false);
+    item.addEventListener('drop', handleDrop, false);
+  }
+  document.querySelectorAll('.link-item').forEach(addDragEvents);
+
+  // Add drag events to new items dynamically
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(m => {
+      m.addedNodes.forEach(node => {
+        if(node.classList && node.classList.contains('link-item')) addDragEvents(node);
+      });
+    });
+  });
+  observer.observe(document.getElementById('links-container'), { childList: true });
+</script>
 
 </body>
 </html>
