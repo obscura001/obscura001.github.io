@@ -4,55 +4,129 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Obscura | Links</title>
+<!-- Font Awesome for social media icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
+  /* General Page Styling */
   body {
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #000000, #2b2b2b);
     color: white;
     text-align: center;
-    padding: 40px 20px;
+    padding: 50px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
+
+  /* Profile Image */
   img {
-    width: 140px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     margin-bottom: 20px;
-    border: 3px solid white;
+    border: 4px solid white;
+    object-fit: cover;
   }
+
+  /* Page Title */
   h1 {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    font-size: 2em;
   }
-  p {
-    color: #ccc;
+
+  p.subtitle {
+    color: #aaa;
     margin-bottom: 30px;
+    font-size: 1.1em;
   }
-  a {
-    display: block;
-    max-width: 320px;
+
+  /* Buttons / Links */
+  .link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 300px;
     margin: 12px auto;
-    padding: 15px;
+    padding: 15px 20px;
     background: white;
     color: black;
     text-decoration: none;
     font-size: 18px;
-    border-radius: 30px;
     font-weight: bold;
+    border-radius: 30px;
+    transition: all 0.3s ease;
   }
-  a:hover {
+
+  .link-btn i {
+    margin-right: 10px;
+    font-size: 20px;
+  }
+
+  .link-btn:hover {
+    transform: scale(1.05);
     background: #ddd;
+  }
+
+  /* Text blocks under links */
+  .text-block {
+    max-width: 320px;
+    margin: 15px auto;
+    color: #ccc;
+    font-size: 14px;
+  }
+
+  /* Extra Images / Videos */
+  .extra-media {
+    margin: 20px auto;
+    max-width: 320px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  /* Responsive */
+  @media (max-width: 400px) {
+    h1 {
+      font-size: 1.5em;
+    }
+    .link-btn {
+      font-size: 16px;
+      padding: 12px 18px;
+    }
   }
 </style>
 </head>
 <body>
 
+<!-- Profile -->
 <img src="profile.jpg" alt="Profile photo">
-
 <h1>Obscura</h1>
-<p>Find me online</p>
+<p class="subtitle">Find me online</p>
 
-<a href="https://instagram.com/obscura001">Instagram</a>
-<a href="https://tiktok.com/@obscura097">TikTok</a>
-<a href="https://pinterest.com/obscura001">Pinterest</a>
+<!-- Social Links -->
+<a href="https://www.instagram.com/obscura001/" class="link-btn" target="_blank">
+  <i class="fab fa-instagram"></i>Instagram
+</a>
+<div class="text-block">Check out my photos and stories!</div>
 
+<a href="https://www.tiktok.com/@obscura097" class="link-btn" target="_blank">
+  <i class="fab fa-tiktok"></i>TikTok
+</a>
+<div class="text-block">Watch my latest videos!</div>
+
+<a href="https://www.pinterest.com/obscura001/" class="link-btn" target="_blank">
+  <i class="fab fa-pinterest"></i>Pinterest
+</a>
+<div class="text-block">Pinning all my favorite ideas.</div>
+
+<!-- Extra media example (image) -->
+<img src="example.jpg" alt="Extra media" class="extra-media">
+
+<!-- Extra media example (video) -->
+<iframe class="extra-media" width="320" height="180" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+title="YouTube video" frameborder="0" allowfullscreen></iframe>
 
 </body>
 </html>
