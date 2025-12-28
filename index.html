@@ -124,4 +124,41 @@
     <h1 contenteditable="true">Obscura</h1>
 
     <a href="https://www.instagram.com/obscura001/" class="link-btn" target="_blank">
-      <i class="fab fa-instagram"></i>Instagr
+      <i class="fab fa-instagram"></i>Instagram
+    </a>
+    <div class="text-block">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
+
+    <a href="https://www.tiktok.com/@obscura097" class="link-btn" target="_blank">
+      <i class="fab fa-tiktok"></i>TikTok
+    </a>
+    <div class="text-block">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
+
+    <a href="https://www.pinterest.com/obscura001/" class="link-btn" target="_blank">
+      <i class="fab fa-pinterest"></i>Pinterest
+    </a>
+    <div class="text-block">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
+  </div>
+
+  <!-- RIGHT IMAGE -->
+  <img src="" class="side-img" onclick="changeImage(this)" alt="Right image">
+
+</div>
+
+<script>
+  function changeImage(img) {
+    const url = prompt("Paste image URL:");
+    if (url) img.src = url;
+  }
+
+  function changeCover() {
+    const url = prompt("Paste cover image URL:");
+    if (url) {
+      const cover = document.querySelector('.cover');
+      cover.style.backgroundImage = `url('${url}')`;
+      cover.innerHTML = "";
+    }
+  }
+</script>
+
+</body>
+</html>
