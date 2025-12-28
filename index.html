@@ -11,44 +11,44 @@
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #000000, #2b2b2b);
     color: white;
-    min-height: 100vh;
     margin: 0;
-    padding: 40px 10px;
-    display: flex;
-    justify-content: center;
+    padding: 0;
   }
 
-  /* Main layout */
+  /* Cover Image */
+  .cover {
+    width: 100%;
+    height: 220px;
+    background-image: url('cover.jpg');
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+  }
+
+  /* Layout */
   .layout {
     display: grid;
     grid-template-columns: 1fr 340px 1fr;
     gap: 20px;
-    width: 100%;
     max-width: 900px;
+    margin: 30px auto;
     align-items: center;
+    padding: 0 10px;
   }
 
   /* Side images */
   .side-img {
-    width: 120px;
+    width: 140px;
     max-width: 100%;
-    border-radius: 12px;
+    border-radius: 14px;
     object-fit: cover;
+    cursor: pointer;
     justify-self: center;
   }
 
-  /* Center column */
+  /* Center content */
   .center {
     text-align: center;
-  }
-
-  .profile {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    border: 4px solid white;
-    object-fit: cover;
-    margin-bottom: 20px;
   }
 
   h1 {
@@ -87,7 +87,7 @@
     font-size: 14px;
   }
 
-  /* Mobile layout */
+  /* Mobile */
   @media (max-width: 768px) {
     .layout {
       grid-template-columns: 1fr;
@@ -101,15 +101,17 @@
 </head>
 <body>
 
+<!-- COVER IMAGE -->
+<div class="cover" onclick="changeCover()"></div>
+
 <div class="layout">
 
-  <!-- Left Image -->
-  <img src="left-image.jpg" class="side-img" alt="Left Image">
+  <!-- LEFT IMAGE -->
+  <img src="left-image.jpg" class="side-img" onclick="changeImage(this)" alt="Left image">
 
-  <!-- Center Content -->
+  <!-- CENTER CONTENT -->
   <div class="center">
-    <img src="profile.jpg" class="profile" alt="Profile Photo">
-    <h1>Obscura</h1>
+    <h1 contenteditable="true">Obscura</h1>
 
     <a href="https://www.instagram.com/obscura001/" class="link-btn" target="_blank">
       <i class="fab fa-instagram"></i>Instagram
@@ -127,10 +129,22 @@
     <div class="text-block">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
   </div>
 
-  <!-- Right Image -->
-  <img src="right-image.jpg" class="side-img" alt="Right Image">
+  <!-- RIGHT IMAGE -->
+  <img src="right-image.jpg" class="side-img" onclick="changeImage(this)" alt="Right image">
 
 </div>
+
+<script>
+  function changeImage(img) {
+    const url = prompt("Paste image URL:");
+    if (url) img.src = url;
+  }
+
+  function changeCover() {
+    const url = prompt("Paste cover image URL:");
+    if (url) document.querySelector('.cover').style.backgroundImage = `url('${url}')`;
+  }
+</script>
 
 </body>
 </html>
