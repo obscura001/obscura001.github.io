@@ -15,7 +15,7 @@
     padding: 0;
   }
 
-  /* CLICKABLE COVER BANNER */
+  /* COVER */
   .cover {
     width: 100%;
     height: 220px;
@@ -45,24 +45,20 @@
     padding: 0 10px;
   }
 
-  /* SIDE IMAGES */
   .side-img {
     width: 140px;
-    max-width: 100%;
     border-radius: 14px;
     object-fit: cover;
     cursor: pointer;
     justify-self: center;
   }
 
-  /* CENTER */
   .center {
     text-align: center;
   }
 
   h1 {
     margin-bottom: 30px;
-    cursor: text;
   }
 
   .link-btn {
@@ -97,7 +93,6 @@
     font-size: 14px;
   }
 
-  /* MOBILE */
   @media (max-width: 768px) {
     .layout {
       grid-template-columns: 1fr;
@@ -117,47 +112,86 @@
 <div class="layout">
 
   <!-- LEFT IMAGE -->
-  <img src="" class="side-img" onclick="changeImage(this)" alt="Left image">
+  <img class="side-img" id="leftImg" onclick="changeImage('leftImg')" alt="Left image">
 
   <!-- CENTER -->
   <div class="center">
-    <h1 contenteditable="true">Obscura</h1>
+    <h1 id="title" contenteditable="true">Obscura</h1>
 
     <a href="https://www.instagram.com/obscura001/" class="link-btn" target="_blank">
       <i class="fab fa-instagram"></i>Instagram
     </a>
-    <div class="text-block">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
+    <div class="text-block" contenteditable="true">
+      ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!
+    </div>
 
     <a href="https://www.tiktok.com/@obscura097" class="link-btn" target="_blank">
       <i class="fab fa-tiktok"></i>TikTok
     </a>
-    <div class="text-block">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
+    <div class="text-block" contenteditable="true">
+      ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!
+    </div>
 
     <a href="https://www.pinterest.com/obscura001/" class="link-btn" target="_blank">
       <i class="fab fa-pinterest"></i>Pinterest
     </a>
-    <div class="text-block">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
+    <div class="text-block" contenteditable="true">
+      ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!
+    </div>
   </div>
 
   <!-- RIGHT IMAGE -->
-  <img src="" class="side-img" onclick="changeImage(this)" alt="Right image">
+  <img class="side-img" id="rightImg" onclick="changeImage('rightImg')" alt="Right image">
 
 </div>
 
 <script>
-  function changeImage(img) {
+  // LOAD SAVED DATA
+  window.onload = () => {
+    if (localStorage.cover)
+      document.querySelector('.cover').style.backgroundImage = `url('${localStorage.cover}')`;
+
+    if (localStorage.leftImg)
+      document.getElementById('leftImg').src = localStorage.leftImg;
+
+    if (localStorage.rightImg)
+      document.getElementById('rightImg').src = localStorage.rightImg;
+
+    if (localStorage.title)
+      document.getElementById('title').innerText = localStorage.title;
+
+    document.querySelectorAll('[contenteditable]').forEach((el, i) => {
+      if (localStorage['text' + i])
+        el.innerText = localStorage['text' + i];
+
+      el.addEventListener('input', () => {
+        localStorage['text' + i] = el.innerText;
+      });
+    });
+  };
+
+  // CHANGE SIDE IMAGES
+  function changeImage(id) {
     const url = prompt("Paste image URL:");
-    if (url) img.src = url;
+    if (!url) return;
+    document.getElementById(id).src = url;
+    localStorage[id] = url;
   }
 
+  // CHANGE COVER
   function changeCover() {
     const url = prompt("Paste cover image URL:");
-    if (url) {
-      const cover = document.querySelector('.cover');
-      cover.style.backgroundImage = `url('${url}')`;
-      cover.innerHTML = "";
-    }
+    if (!url) return;
+    const cover = document.querySelector('.cover');
+    cover.style.backgroundImage = `url('${url}')`;
+    cover.innerHTML = "";
+    localStorage.cover = url;
   }
+
+  // SAVE TITLE
+  document.getElementById('title').addEventListener('input', e => {
+    localStorage.title = e.target.innerText;
+  });
 </script>
 
 </body>
