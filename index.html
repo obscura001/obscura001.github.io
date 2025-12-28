@@ -15,17 +15,26 @@
     padding: 0;
   }
 
-  /* Cover Image */
+  /* CLICKABLE COVER BANNER */
   .cover {
     width: 100%;
     height: 220px;
-    background-image: url('cover.jpg');
+    background: #111;
     background-size: cover;
     background-position: center;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  /* Layout */
+  .cover::after {
+    content: "Click to add cover image";
+    color: #777;
+    font-size: 14px;
+  }
+
+  /* LAYOUT */
   .layout {
     display: grid;
     grid-template-columns: 1fr 340px 1fr;
@@ -36,7 +45,7 @@
     padding: 0 10px;
   }
 
-  /* Side images */
+  /* SIDE IMAGES */
   .side-img {
     width: 140px;
     max-width: 100%;
@@ -46,13 +55,14 @@
     justify-self: center;
   }
 
-  /* Center content */
+  /* CENTER */
   .center {
     text-align: center;
   }
 
   h1 {
     margin-bottom: 30px;
+    cursor: text;
   }
 
   .link-btn {
@@ -87,7 +97,7 @@
     font-size: 14px;
   }
 
-  /* Mobile */
+  /* MOBILE */
   @media (max-width: 768px) {
     .layout {
       grid-template-columns: 1fr;
@@ -101,51 +111,17 @@
 </head>
 <body>
 
-<!-- COVER IMAGE -->
+<!-- COVER -->
 <div class="cover" onclick="changeCover()"></div>
 
 <div class="layout">
 
   <!-- LEFT IMAGE -->
-  <img src="left-image.jpg" class="side-img" onclick="changeImage(this)" alt="Left image">
+  <img src="" class="side-img" onclick="changeImage(this)" alt="Left image">
 
-  <!-- CENTER CONTENT -->
+  <!-- CENTER -->
   <div class="center">
     <h1 contenteditable="true">Obscura</h1>
 
     <a href="https://www.instagram.com/obscura001/" class="link-btn" target="_blank">
-      <i class="fab fa-instagram"></i>Instagram
-    </a>
-    <div class="text-block">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
-
-    <a href="https://www.tiktok.com/@obscura097" class="link-btn" target="_blank">
-      <i class="fab fa-tiktok"></i>TikTok
-    </a>
-    <div class="text-block">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
-
-    <a href="https://www.pinterest.com/obscura001/" class="link-btn" target="_blank">
-      <i class="fab fa-pinterest"></i>Pinterest
-    </a>
-    <div class="text-block">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
-  </div>
-
-  <!-- RIGHT IMAGE -->
-  <img src="right-image.jpg" class="side-img" onclick="changeImage(this)" alt="Right image">
-
-</div>
-
-<script>
-  function changeImage(img) {
-    const url = prompt("Paste image URL:");
-    if (url) img.src = url;
-  }
-
-  function changeCover() {
-    const url = prompt("Paste cover image URL:");
-    if (url) document.querySelector('.cover').style.backgroundImage = `url('${url}')`;
-  }
-</script>
-
-</body>
-</html>
-
+      <i class="fab fa-instagram"></i>Instagr
