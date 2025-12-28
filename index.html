@@ -3,22 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Obscura | Links</title>
+<title>Obscura 001 Hub</title>
+
+<!-- SOFT ROMANTIC GOTHIC FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
   body {
-    font-family: Arial, sans-serif;
+    margin: 0;
     background: linear-gradient(135deg, #000000, #2b2b2b);
     color: white;
-    margin: 0;
-    padding: 0;
+    font-family: 'Playfair Display', serif;
   }
 
   /* COVER */
   .cover {
-    width: 100%;
-    height: 220px;
+    height: 230px;
     background: #111;
     background-size: cover;
     background-position: center;
@@ -41,16 +43,18 @@
     gap: 20px;
     max-width: 900px;
     margin: 30px auto;
-    align-items: center;
-    padding: 0 10px;
+    padding: 0 12px;
+    align-items: start;
+  }
+
+  .draggable {
+    cursor: grab;
   }
 
   .side-img {
     width: 140px;
     border-radius: 14px;
     object-fit: cover;
-    cursor: pointer;
-    justify-self: center;
   }
 
   .center {
@@ -58,7 +62,10 @@
   }
 
   h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
     margin-bottom: 30px;
+    letter-spacing: 1px;
   }
 
   .link-btn {
@@ -66,13 +73,13 @@
     align-items: center;
     justify-content: center;
     max-width: 300px;
-    margin: 12px auto 4px auto;
-    padding: 15px 20px;
-    background: white;
-    color: black;
+    margin: 12px auto 4px;
+    padding: 15px;
+    background: #fff;
+    color: #000;
     text-decoration: none;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 17px;
+    font-weight: 600;
     border-radius: 30px;
     transition: 0.3s;
   }
@@ -88,18 +95,28 @@
 
   .text-block {
     max-width: 320px;
-    margin: 0 auto 22px auto;
+    margin: 0 auto 22px;
     color: #ccc;
     font-size: 14px;
   }
 
+  /* MOBILE TUNING */
   @media (max-width: 768px) {
     .layout {
       grid-template-columns: 1fr;
     }
 
+    .draggable {
+      cursor: default;
+    }
+
     .side-img {
-      margin: 10px auto;
+      width: 120px;
+      margin: 12px auto;
+    }
+
+    h1 {
+      font-size: 22px;
     }
   }
 </style>
@@ -112,18 +129,17 @@
 <div class="layout">
 
   <!-- LEFT IMAGE -->
-  <img class="side-img" id="leftImg" onclick="changeImage('leftImg')" alt="Left image">
+  <img id="leftImg" class="side-img draggable" draggable="true"
+       onclick="changeImage('leftImg')" alt="Left image">
 
   <!-- CENTER -->
-  <div class="center">
-    <h1 id="title" contenteditable="true">Obscura</h1>
+  <div id="centerCol" class="center draggable" draggable="true">
+    <h1 contenteditable="true">✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
 
     <a href="https://www.instagram.com/obscura001/" class="link-btn" target="_blank">
       <i class="fab fa-instagram"></i>Instagram
     </a>
-    <div class="text-block" contenteditable="true">
-      ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!
-    </div>
+    <div class="text-block" contenteditable="true">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
 
     <a href="https://www.tiktok.com/@obscura097" class="link-btn" target="_blank">
       <i class="fab fa-tiktok"></i>TikTok
@@ -141,57 +157,43 @@
   </div>
 
   <!-- RIGHT IMAGE -->
-  <img class="side-img" id="rightImg" onclick="changeImage('rightImg')" alt="Right image">
+  <img id="rightImg" class="side-img draggable" draggable="true"
+       onclick="changeImage('rightImg')" alt="Right image">
 
 </div>
 
 <script>
-  // LOAD SAVED DATA
-  window.onload = () => {
-    if (localStorage.cover)
-      document.querySelector('.cover').style.backgroundImage = `url('${localStorage.cover}')`;
+/* LOAD SAVED */
+window.onload = () => {
+  if (localStorage.cover)
+    document.querySelector('.cover').style.backgroundImage = `url('${localStorage.cover}')`;
 
-    if (localStorage.leftImg)
-      document.getElementById('leftImg').src = localStorage.leftImg;
-
-    if (localStorage.rightImg)
-      document.getElementById('rightImg').src = localStorage.rightImg;
-
-    if (localStorage.title)
-      document.getElementById('title').innerText = localStorage.title;
-
-    document.querySelectorAll('[contenteditable]').forEach((el, i) => {
-      if (localStorage['text' + i])
-        el.innerText = localStorage['text' + i];
-
-      el.addEventListener('input', () => {
-        localStorage['text' + i] = el.innerText;
-      });
-    });
-  };
-
-  // CHANGE SIDE IMAGES
-  function changeImage(id) {
-    const url = prompt("Paste image URL:");
-    if (!url) return;
-    document.getElementById(id).src = url;
-    localStorage[id] = url;
-  }
-
-  // CHANGE COVER
-  function changeCover() {
-    const url = prompt("Paste cover image URL:");
-    if (!url) return;
-    const cover = document.querySelector('.cover');
-    cover.style.backgroundImage = `url('${url}')`;
-    cover.innerHTML = "";
-    localStorage.cover = url;
-  }
-
-  // SAVE TITLE
-  document.getElementById('title').addEventListener('input', e => {
-    localStorage.title = e.target.innerText;
+  ['leftImg','rightImg'].forEach(id => {
+    if (localStorage[id]) document.getElementById(id).src = localStorage[id];
   });
+
+  document.querySelectorAll('[contenteditable]').forEach((el, i) => {
+    if (localStorage['text'+i]) el.innerText = localStorage['text'+i];
+    el.addEventListener('input', () => localStorage['text'+i] = el.innerText);
+  });
+};
+
+/* IMAGE CHANGE */
+function changeImage(id) {
+  const url = prompt("Paste image URL:");
+  if (!url) return;
+  document.getElementById(id).src = url;
+  localStorage[id] = url;
+}
+
+/* COVER */
+function changeCover() {
+  const url = prompt("Paste cover image URL:");
+  if (!url) return;
+  document.querySelector('.cover').style.backgroundImage = `url('${url}')`;
+  document.querySelector('.cover').innerHTML = "";
+  localStorage.cover = url;
+}
 </script>
 
 </body>
