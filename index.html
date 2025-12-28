@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Obscura | Links</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -14,24 +15,26 @@
     padding: 50px 20px;
     min-height: 100vh;
   }
-  #profile-img {
+
+  img.profile {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     border: 4px solid white;
     object-fit: cover;
     margin-bottom: 20px;
-    cursor: pointer;
   }
+
   h1 {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
+
   .link-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     max-width: 300px;
-    margin: 12px auto;
+    margin: 12px auto 4px auto;
     padding: 15px 20px;
     background: white;
     color: black;
@@ -39,28 +42,32 @@
     font-size: 18px;
     font-weight: bold;
     border-radius: 30px;
-    transition: all 0.3s ease;
+    transition: 0.3s;
   }
+
   .link-btn i {
     margin-right: 10px;
   }
+
   .link-btn:hover {
     transform: scale(1.05);
     background: #ddd;
   }
+
   .text-block {
     max-width: 320px;
-    margin: 5px auto 20px auto;
+    margin: 0 auto 22px auto;
     color: #ccc;
     font-size: 14px;
   }
+
   .side-images {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin: 20px 0;
     gap: 20px;
+    margin-bottom: 20px;
   }
+
   .side-images img {
     width: 60px;
     height: 60px;
@@ -71,7 +78,7 @@
 </head>
 <body>
 
-<img id="profile-img" src="profile.jpg" alt="Profile Photo">
+<img src="profile.jpg" class="profile" alt="Profile Photo">
 <h1>Obscura</h1>
 
 <div class="side-images">
@@ -79,27 +86,23 @@
   <img src="right-image.jpg" alt="Right Image">
 </div>
 
-<!-- Social Links with one sentence each -->
-<div class="link-item">
-  <a href="https://www.instagram.com/obscura001/" class="link-btn" target="_blank">
-    <i class="fab fa-instagram"></i>Instagram
-  </a>
-  <div class="text-block">⊱ ─── ⋆⋅ ♰ ⋅⋆ ─── ⊰</div>
-</div>
+<!-- Instagram -->
+<a href="https://www.instagram.com/obscura001/" class="link-btn" target="_blank">
+  <i class="fab fa-instagram"></i>Instagram
+</a>
+<div class="text-block">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
 
-<div class="link-item">
-  <a href="https://www.tiktok.com/@obscura097" class="link-btn" target="_blank">
-    <i class="fab fa-tiktok"></i>TikTok
-  </a>
-  <div class="text-block">𝘞𝘦𝘭𝘤𝘰𝘮𝘦 𝘵𝘰 𝘮𝘺 𝘱𝘢ɢᴇ!!</div>
-</div>
+<!-- TikTok -->
+<a href="https://www.tiktok.com/@obscura097" class="link-btn" target="_blank">
+  <i class="fab fa-tiktok"></i>TikTok
+</a>
+<div class="text-block">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
 
-<div class="link-item">
-  <a href="https://www.pinterest.com/obscura001/" class="link-btn" target="_blank">
-    <i class="fab fa-pinterest"></i>Pinterest
-  </a>
-  <div class="text-block">- ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
-</div>
+<!-- Pinterest -->
+<a href="https://www.pinterest.com/obscura001/" class="link-btn" target="_blank">
+  <i class="fab fa-pinterest"></i>Pinterest
+</a>
+<div class="text-block">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
 
 </body>
 </html>
