@@ -163,13 +163,37 @@
 </div>
 
 <script>
-/* LOAD SAVED */
-window.onload = () => {
-  if (localStorage.cover)
-    document.querySelector('.cover').style.backgroundImage = `url('${localStorage.cover}')`;
+function uploadImage(imgId) {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
 
-  ['leftImg','rightImg'].forEach(id => {
-    if (localStorage[id]) document.getElementById(id).src = localStorage[id];
+  input.onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      document.getElementById(imgId).src = reader.result;
+      localStorage[imgId] = reader.result;
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  input.click();
+}
+
+// LOAD SAVED IMAGES
+window.onload = () => {
+  ['leftImg','rightImg','coverImg'].forEach(id => {
+    if (localStorage[id]) {
+      if (id === 'coverImg') {
+        document.querySelector('.cover').style.backgroundImage =
+          `url('${localStorage[id]}')`;
+      } else {
+        document.getElementById(id).src = localStorage[id];
+      }
+    }
   });
 
   document.querySelectorAll('[contenteditable]').forEach((el, i) => {
@@ -177,22 +201,10 @@ window.onload = () => {
     el.addEventListener('input', () => localStorage['text'+i] = el.innerText);
   });
 };
+</script>
 
-/* IMAGE CHANGE */
-function changeImage(id) {
-  const url = prompt("Paste image URL:");
-  if (!url) return;
-  document.getElementById(id).src = url;
-  localStorage[id] = url;
-}
 
-/* COVER */
-function changeCover() {
-  const url = prompt("Paste cover image URL:");
-  if (!url) return;
-  document.querySelector('.cover').style.backgroundImage = `url('${url}')`;
-  document.querySelector('.cover').innerHTML = "";
-  localStorage.cover = url;
+
 }
 </script>
 
