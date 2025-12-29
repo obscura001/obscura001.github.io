@@ -15,7 +15,7 @@ body {
   user-select:none;
 }
 .cover {
-  height:350px; /* increased cover height */
+  height:200px; /* smaller cover */
   background:#111;
   background-size:cover;
   background-position:center;
@@ -25,13 +25,13 @@ body {
   cursor:pointer;
   position:relative;
 }
-.cover span{color:#666;font-size:16px;}
+.cover span{color:#666;font-size:14px;}
 .layout{
   display:grid;
-  grid-template-columns:1fr 500px 1fr; /* wider middle column */
-  max-width:1200px; /* increased max width */
-  margin:40px auto;
-  gap:30px;
+  grid-template-columns:1fr 400px 1fr;
+  max-width:1000px;
+  margin:30px auto;
+  gap:40px;
   padding:0 20px;
 }
 .side-wrap{
@@ -41,8 +41,8 @@ body {
   position:relative;
 }
 .side-img{
-  width:200px; /* larger default width */
-  height:250px; /* larger default height */
+  width:220px;  /* bigger default width */
+  height:300px; /* bigger default height */
   border-radius:14px;
   background:#111;
   object-fit:cover;
@@ -66,9 +66,11 @@ h1{ font-family:'Cinzel', serif; font-size:32px; margin-bottom:40px; }
   display:flex;
   justify-content:flex-start;
   align-items:center;
-  width:400px; /* bigger buttons */
-  margin:14px auto 6px;
-  padding:18px 24px;
+  width:300px;
+  height:60px; /* taller button */
+  line-height:60px;
+  margin:20px auto; /* more spacing vertically */
+  padding:0 24px;
   background:white;
   color:black;
   text-decoration:none;
@@ -78,7 +80,7 @@ h1{ font-family:'Cinzel', serif; font-size:32px; margin-bottom:40px; }
   cursor:grab;
 }
 .link-btn .fa{ margin-right:16px; font-size:20px;}
-.text-block{ font-size:16px; color:#ccc; margin-bottom:28px; }
+.text-block{ font-size:16px; color:#ccc; margin-bottom:30px; }
 #editBtn{
   position:fixed;
   bottom:10px;
@@ -139,7 +141,7 @@ h1{ font-family:'Cinzel', serif; font-size:32px; margin-bottom:40px; }
       <i class="fab fa-tiktok" id="icon2"></i>TikTok
       <input type="color" class="edit-color" id="color2" title="Change color">
     </a>
-    <div class="text-block" contenteditable="false" id="text2">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴜᴇꜱᴛɪᴏɴꜱ!!</div>
+    <div class="text-block" contenteditable="false" id="text2">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
 
     <a class="link-btn" id="social3" href="https://pinterest.com/obscura001" target="_blank">
       <i class="fab fa-pinterest" id="icon3"></i>Pinterest
@@ -299,6 +301,7 @@ window.onload=()=>{
 </script>
 </body>
 </html>
+
 
 
   
