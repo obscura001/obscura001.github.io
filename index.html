@@ -77,6 +77,7 @@ h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
   font-weight:bold;
   position:absolute;
 }
+.link-btn .fa{ margin-right:8px; }
 .text-block{ font-size:14px; color:#ccc; margin-bottom:22px; }
 #editBtn{
   position:fixed;
@@ -101,6 +102,7 @@ h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
   cursor:pointer;
   color:#ccc;
 }
+.edit-icon{display:none; margin-left:6px; cursor:pointer; font-size:12px;}
 @media(max-width:768px){
   .layout{grid-template-columns:1fr;}
   .side-img,.link-btn{position:relative;}
@@ -128,17 +130,20 @@ h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
     <h1 contenteditable="false" id="title">✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
 
     <a class="link-btn" id="social1" href="https://instagram.com/obscura001" target="_blank">
-      <i class="fab fa-instagram" id="icon1"></i>&nbsp;Instagram
+      <i class="fab fa-instagram" id="icon1"></i>Instagram
+      <i class="fa fa-edit edit-icon" id="editIcon1" title="Change icon"></i>
     </a>
     <div class="text-block" contenteditable="false" id="text1">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
 
     <a class="link-btn" id="social2" href="https://tiktok.com/@obscura097" target="_blank">
-      <i class="fab fa-tiktok" id="icon2"></i>&nbsp;TikTok
+      <i class="fab fa-tiktok" id="icon2"></i>TikTok
+      <i class="fa fa-edit edit-icon" id="editIcon2" title="Change icon"></i>
     </a>
     <div class="text-block" contenteditable="false" id="text2">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
 
     <a class="link-btn" id="social3" href="https://pinterest.com/obscura001" target="_blank">
-      <i class="fab fa-pinterest" id="icon3"></i>&nbsp;Pinterest
+      <i class="fab fa-pinterest" id="icon3"></i>Pinterest
+      <i class="fa fa-edit edit-icon" id="editIcon3" title="Change icon"></i>
     </a>
     <div class="text-block" contenteditable="false" id="text3">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
   </div>
@@ -172,10 +177,12 @@ function enableEditMode(){
   editMode=true;
   document.querySelectorAll("[contenteditable]").forEach(e=>e.contentEditable=true);
   document.querySelectorAll(".resize-handle").forEach(h=>h.style.display="block");
+  document.querySelectorAll(".edit-icon").forEach(e=>e.style.display="inline-block");
   uploadBox.style.display="block";
   cover.onclick=()=>coverInput.click();
   leftImg.onclick=()=>leftInput.click();
   rightImg.onclick=()=>rightInput.click();
+  document.querySelectorAll(".link-btn").forEach(btn=>makeDraggable(btn));
 }
 document.getElementById("editBtn").onclick=()=>{
   const pass=prompt("Enter edit password");
@@ -208,11 +215,11 @@ function addExtraImage(src){
   img.style.top="50px";
   const handle=document.createElement("div");
   handle.className="resize-handle";
-  img.parentNode=document.body;
   document.body.appendChild(img);
   document.body.appendChild(handle);
   makeDraggable(img);
   makeResizable(img,handle);
+  restoreExtraImage(img,handle);
 }
 
 /* DRAG */
@@ -239,41 +246,54 @@ function makeDraggable(el){
   el.ondragstart=()=>false;
 }
 
-/* RESIZE */
+/* RESIZE BOTH WIDTH & HEIGHT */
 function makeResizable(el,handle){
   handle.onmousedown=function(e){
     if(!editMode){return;}
     e.preventDefault();
     const startX=e.clientX;
+    const startY=e.clientY;
     const startWidth=el.offsetWidth;
+    const startHeight=el.offsetHeight;
     document.onmousemove=function(e){
       const newWidth=startWidth+(e.clientX-startX);
+      const newHeight=startHeight+(e.clientY-startY);
       el.style.width=newWidth+"px";
+      el.style.height=newHeight+"px";
     };
     document.onmouseup=function(){
       document.onmousemove=null;
       document.onmouseup=null;
       localStorage[el.id+'Width']=el.style.width;
+      localStorage[el.id+'Height']=el.style.height;
     };
   };
 }
 
-/* INITIALIZE DRAG/RESIZE */
-makeDraggable(leftImg);
-makeDraggable(rightImg);
-makeDraggable(cover);
-makeResizable(leftImg,leftHandle);
-makeResizable(rightImg,rightHandle);
-makeResizable(cover,coverHandle);
+/* SOCIAL ICON EDIT */
+function editSocialIcon(iconEl){
+  if(!editMode) return;
+  const newClass=prompt("Enter new Font Awesome class (e.g. fab fa-twitter)");
+  if(newClass){
+    iconEl.className=newClass;
+  }
+}
 
-/* RESTORE */
+/* RESTORE SAVED DATA */
 window.onload=()=>{
   if(localStorage.cover){ cover.style.backgroundImage=`url(${localStorage.cover})`; cover.innerHTML=""; }
   if(localStorage.leftImg){ leftImg.src=localStorage.leftImg; leftImg.classList.add("loaded"); }
   if(localStorage.rightImg){ rightImg.src=localStorage.rightImg; rightImg.classList.add("loaded"); }
-  if(localStorage.leftImg+'Width' in localStorage){ leftImg.style.width=localStorage.leftImg+'Width'; }
-  if(localStorage.rightImg+'Width' in localStorage){ rightImg.style.width=localStorage.rightImg+'Width'; }
+  if(localStorage.leftImg+'Width' in localStorage){ leftImg.style.width=localStorage[leftImg.id+'Width']; leftImg.style.height=localStorage[leftImg.id+'Height']; }
+  if(localStorage.rightImg+'Width' in localStorage){ rightImg.style.width=localStorage[rightImg.id+'Width']; rightImg.style.height=localStorage[rightImg.id+'Height']; }
+  if(localStorage.cover+'Width' in localStorage){ cover.style.height=localStorage[cover.id+'Height']; }
 };
+
+/* ADD CLICK HANDLERS FOR ICON EDIT */
+document.getElementById("editIcon1").onclick=()=>editSocialIcon(document.getElementById("icon1"));
+document.getElementById("editIcon2").onclick=()=>editSocialIcon(document.getElementById("icon2"));
+document.getElementById("editIcon3").onclick=()=>editSocialIcon(document.getElementById("icon3"));
+
 </script>
 </body>
 </html>
