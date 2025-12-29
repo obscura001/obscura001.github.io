@@ -14,9 +14,9 @@ body {
   background: linear-gradient(135deg, #000, #2a2a2a);
   color: white;
   font-family: 'Playfair Display', serif;
+  user-select: none;
 }
 
-/* COVER */
 .cover {
   height: 230px;
   background: #111;
@@ -28,7 +28,8 @@ body {
   cursor: pointer;
 }
 
-/* LAYOUT */
+.cover span { color:#666; font-size:14px; }
+
 .layout {
   display: grid;
   grid-template-columns: 1fr 340px 1fr;
@@ -38,23 +39,37 @@ body {
   padding: 0 12px;
 }
 
+.side-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
 .side-img {
   width: 140px;
+  height: 180px;
   border-radius: 14px;
-  justify-self: center;
+  background: #111;
+  object-fit: cover;
   cursor: pointer;
-  transition: width 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
 }
 
-.center {
-  text-align: center;
+.side-img::after {
+  content: "Upload image";
+  color: #666;
+  font-size: 13px;
 }
 
-h1 {
-  font-family: 'Cinzel', serif;
-  font-size: 26px;
-  margin-bottom: 30px;
-}
+.side-img.loaded::after { content: ""; }
+
+.center { text-align:center; position:relative; }
+
+h1 { font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
 
 .link-btn {
   display: flex;
@@ -68,44 +83,26 @@ h1 {
   text-decoration: none;
   border-radius: 30px;
   font-weight: bold;
+  position: absolute;
 }
 
-.text-block {
-  font-size: 14px;
-  color: #ccc;
-  margin-bottom: 22px;
-}
+.text-block { font-size:14px; color:#ccc; margin-bottom:22px; }
 
-/* EDIT CONTROLS */
-.editor {
-  display: none;
-  text-align: center;
-  margin-top: 6px;
-  font-size: 12px;
-  color: #aaa;
-}
+.editor { display:none; margin-top:6px; font-size:12px; color:#aaa; }
 
-.editor input {
-  width: 120px;
-}
-
-/* EDIT BUTTON */
 #editBtn {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  background: #111;
-  color: #888;
-  border: 1px solid #333;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 12px;
+  position: fixed; bottom:10px; right:10px;
+  background:#111; color:#888;
+  border:1px solid #333;
+  padding:8px 12px;
+  cursor:pointer;
+  font-size:12px;
 }
 
-@media (max-width: 768px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
+@media (max-width:768px){
+  .layout{grid-template-columns:1fr;}
+  .side-img{position:relative;}
+  .link-btn{position:relative;}
 }
 </style>
 </head>
@@ -115,53 +112,46 @@ h1 {
 <input type="file" id="leftInput" hidden>
 <input type="file" id="rightInput" hidden>
 
-<!-- COVER -->
-<div class="cover" id="cover">
-  <span>Click to upload cover</span>
-</div>
+<div class="cover" id="cover"><span>Click to upload cover</span></div>
 <div class="editor" id="coverEditor">
-  Cover height
-  <input type="range" min="150" max="400" id="coverSize">
+  Cover height <input type="range" min="150" max="400" id="coverSize">
 </div>
 
 <div class="layout">
 
-  <div>
+  <!-- LEFT IMAGE -->
+  <div class="side-wrap">
     <img id="leftImg" class="side-img">
     <div class="editor">
-      Image size
-      <input type="range" min="80" max="240" id="leftSize">
+      Image size <input type="range" min="80" max="240" id="leftSize">
     </div>
   </div>
 
+  <!-- CENTER -->
   <div class="center">
-    <h1 contenteditable="false">✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
+    <h1 contenteditable="false" id="title">✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
 
-    <a class="link-btn" href="https://instagram.com/obscura001" target="_blank">
-      <i class="fab fa-instagram"></i>&nbsp;Instagram
+    <a class="link-btn" id="social1" href="https://instagram.com/obscura001" target="_blank">
+      <i class="fab fa-instagram" id="icon1"></i>&nbsp;Instagram
     </a>
-    <div class="text-block" contenteditable="false">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
+    <div class="text-block" contenteditable="false" id="text1">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
 
-    <a class="link-btn" href="https://tiktok.com/@obscura097" target="_blank">
-      <i class="fab fa-tiktok"></i>&nbsp;TikTok
+    <a class="link-btn" id="social2" href="https://tiktok.com/@obscura097" target="_blank">
+      <i class="fab fa-tiktok" id="icon2"></i>&nbsp;TikTok
     </a>
-    <div class="text-block" contenteditable="false">
-      ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!
-    </div>
+    <div class="text-block" contenteditable="false" id="text2">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
 
-    <a class="link-btn" href="https://pinterest.com/obscura001" target="_blank">
-      <i class="fab fa-pinterest"></i>&nbsp;Pinterest
+    <a class="link-btn" id="social3" href="https://pinterest.com/obscura001" target="_blank">
+      <i class="fab fa-pinterest" id="icon3"></i>&nbsp;Pinterest
     </a>
-    <div class="text-block" contenteditable="false">
-      ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!
-    </div>
+    <div class="text-block" contenteditable="false" id="text3">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
   </div>
 
-  <div>
+  <!-- RIGHT IMAGE -->
+  <div class="side-wrap">
     <img id="rightImg" class="side-img">
     <div class="editor">
-      Image size
-      <input type="range" min="80" max="240" id="rightSize">
+      Image size <input type="range" min="80" max="240" id="rightSize">
     </div>
   </div>
 
@@ -173,67 +163,113 @@ h1 {
 let editMode = false;
 const PASSWORD = "obs001edit";
 
+/* ELEMENTS */
 const cover = document.getElementById("cover");
 const leftImg = document.getElementById("leftImg");
 const rightImg = document.getElementById("rightImg");
+const coverInput = document.getElementById("coverInput");
+const leftInput = document.getElementById("leftInput");
+const rightInput = document.getElementById("rightInput");
 
+/* EDIT MODE */
 editBtn.onclick = () => {
-  const pass = prompt("Enter edit password:");
-  if (pass === PASSWORD) {
-    editMode = true;
+  const pass = prompt("Enter edit password");
+  if(pass===PASSWORD){
+    editMode=true;
     alert("Edit mode unlocked 🖤");
-    document.querySelectorAll(".editor").forEach(e => e.style.display = "block");
-    document.querySelectorAll("[contenteditable]").forEach(e => e.contentEditable = true);
-  }
+    document.querySelectorAll(".editor").forEach(e=>e.style.display="block");
+    document.querySelectorAll("[contenteditable]").forEach(e=>e.contentEditable=true);
+
+    /* MAKE DRAGGABLE */
+    makeDraggable(leftImg); makeDraggable(rightImg);
+    [1,2,3].forEach(i=>makeDraggable(document.getElementById("social"+i)));
+  } else alert("Wrong password");
 };
 
 /* IMAGE UPLOAD */
-function upload(input, fn) {
-  input.onchange = e => {
-    if (!editMode) return;
+function upload(input,img,key){
+  input.onchange = e=>{
+    if(!editMode) return;
     const reader = new FileReader();
-    reader.onload = () => fn(reader.result);
+    reader.onload = ()=>{ img.src=reader.result; img.classList.add("loaded"); localStorage[key]=reader.result; };
     reader.readAsDataURL(e.target.files[0]);
   };
 }
+upload(coverInput,cover,'cover');
+upload(leftInput,leftImg,'leftImg');
+upload(rightInput,rightImg,'rightImg');
 
-upload(coverInput, d => {
-  cover.style.backgroundImage = `url(${d})`;
-  cover.innerHTML = "";
-  localStorage.cover = d;
-});
+cover.onclick = ()=> editMode && coverInput.click();
+leftImg.onclick = ()=> editMode && leftInput.click();
+rightImg.onclick = ()=> editMode && rightInput.click();
 
-upload(leftInput, d => localStorage.left = leftImg.src = d);
-upload(rightInput, d => localStorage.right = rightImg.src = d);
+/* IMAGE RESIZE */
+const coverSize=document.getElementById("coverSize");
+coverSize.oninput=e=>{ cover.style.height=e.target.value+"px"; localStorage.coverSize=e.target.value; };
+const leftSize=document.getElementById("leftSize");
+leftSize.oninput=e=>{ leftImg.style.width=e.target.value+"px"; localStorage.leftSize=e.target.value; };
+const rightSize=document.getElementById("rightSize");
+rightSize.oninput=e=>{ rightImg.style.width=e.target.value+"px"; localStorage.rightSize=e.target.value; };
 
-cover.onclick = () => editMode && coverInput.click();
-leftImg.onclick = () => editMode && leftInput.click();
-rightImg.onclick = () => editMode && rightInput.click();
+/* SOCIAL ICON CUSTOMIZATION */
+function setupIcon(i){
+  const icon=document.getElementById("icon"+i);
+  // default saved values
+  if(localStorage["iconColor"+i]) icon.style.color=localStorage["iconColor"+i];
+  if(localStorage["iconSize"+i]) icon.style.fontSize=localStorage["iconSize"+i]+"px";
+}
+[1,2,3].forEach(setupIcon);
 
-/* RESIZE */
-coverSize.oninput = e => {
-  cover.style.height = e.target.value + "px";
-  localStorage.coverSize = e.target.value;
-};
-leftSize.oninput = e => {
-  leftImg.style.width = e.target.value + "px";
-  localStorage.leftSize = e.target.value;
-};
-rightSize.oninput = e => {
-  rightImg.style.width = e.target.value + "px";
-  localStorage.rightSize = e.target.value;
-};
+/* DRAGGABLE FUNCTION */
+function makeDraggable(el){
+  el.onmousedown=function(e){
+    if(!editMode) return;
+    let shiftX=e.clientX-el.getBoundingClientRect().left;
+    let shiftY=e.clientY-el.getBoundingClientRect().top;
+
+    function moveAt(pageX,pageY){
+      el.style.position="absolute";
+      el.style.zIndex=1000;
+      el.style.left=pageX-shiftX+"px";
+      el.style.top=pageY-shiftY+"px";
+    }
+
+    function onMouseMove(e){ moveAt(e.pageX,e.pageY); }
+
+    document.addEventListener('mousemove',onMouseMove);
+    document.onmouseup=function(){
+      document.removeEventListener('mousemove',onMouseMove);
+      document.onmouseup=null;
+      // save position
+      localStorage[el.id+'Left']=el.style.left;
+      localStorage[el.id+'Top']=el.style.top;
+    };
+  };
+  el.ondragstart = ()=>false;
+}
 
 /* RESTORE */
-window.onload = () => {
-  if (localStorage.cover) cover.style.backgroundImage = `url(${localStorage.cover})`;
-  if (localStorage.left) leftImg.src = localStorage.left;
-  if (localStorage.right) rightImg.src = localStorage.right;
-  if (localStorage.coverSize) cover.style.height = localStorage.coverSize + "px";
-  if (localStorage.leftSize) leftImg.style.width = localStorage.leftSize + "px";
-  if (localStorage.rightSize) rightImg.style.width = localStorage.rightSize + "px";
+window.onload = ()=>{
+  if(localStorage.cover){ cover.style.backgroundImage=`url(${localStorage.cover})`; cover.innerHTML=""; }
+  if(localStorage.leftImg){ leftImg.src=localStorage.leftImg; leftImg.classList.add("loaded"); }
+  if(localStorage.rightImg){ rightImg.src=localStorage.rightImg; rightImg.classList.add("loaded"); }
+  if(localStorage.coverSize) cover.style.height=localStorage.coverSize+"px";
+  if(localStorage.leftSize) leftImg.style.width=localStorage.leftSize+"px";
+  if(localStorage.rightSize) rightImg.style.width=localStorage.rightSize+"px";
+
+  [leftImg,rightImg].forEach(el=>{
+    if(localStorage[el.id+'Left']) el.style.left=localStorage[el.id+'Left'];
+    if(localStorage[el.id+'Top']) el.style.top=localStorage[el.id+'Top'];
+  });
+
+  [1,2,3].forEach(i=>{
+    const btn=document.getElementById("social"+i);
+    if(localStorage[btn.id+'Left']) btn.style.left=localStorage[btn.id+'Left'];
+    if(localStorage[btn.id+'Top']) btn.style.top=localStorage[btn.id+'Top'];
+  });
 };
 </script>
-
 </body>
 </html>
+
+
