@@ -3,16 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Obscura 001 Hub</title>
+<title>✦ Obscura 001 hub ✦</title>
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 body {
   margin: 0;
-  background: linear-gradient(135deg, #000000, #2b2b2b);
+  background: linear-gradient(135deg, #000, #2a2a2a);
   color: white;
   font-family: 'Playfair Display', serif;
 }
@@ -23,15 +22,10 @@ body {
   background: #111;
   background-size: cover;
   background-position: center;
-  cursor: default;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.cover span {
-  color: #777;
-  font-size: 14px;
+  cursor: pointer;
 }
 
 /* LAYOUT */
@@ -48,7 +42,8 @@ body {
   width: 140px;
   border-radius: 14px;
   justify-self: center;
-  cursor: default;
+  cursor: pointer;
+  transition: width 0.2s;
 }
 
 .center {
@@ -63,8 +58,8 @@ h1 {
 
 .link-btn {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   max-width: 300px;
   margin: 12px auto 4px;
   padding: 15px;
@@ -73,12 +68,6 @@ h1 {
   text-decoration: none;
   border-radius: 30px;
   font-weight: bold;
-  transition: 0.3s;
-}
-
-.link-btn:hover {
-  transform: scale(1.05);
-  background: #ddd;
 }
 
 .text-block {
@@ -87,38 +76,66 @@ h1 {
   margin-bottom: 22px;
 }
 
-/* MOBILE */
+/* EDIT CONTROLS */
+.editor {
+  display: none;
+  text-align: center;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.editor input {
+  width: 120px;
+}
+
+/* EDIT BUTTON */
+#editBtn {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: #111;
+  color: #888;
+  border: 1px solid #333;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
 @media (max-width: 768px) {
   .layout {
     grid-template-columns: 1fr;
-  }
-  .side-img {
-    width: 120px;
-    margin: 10px auto;
   }
 }
 </style>
 </head>
 <body>
 
-<!-- 🔒 HIDDEN FILE INPUTS -->
-<input type="file" id="coverInput" accept="image/*" hidden>
-<input type="file" id="leftInput" accept="image/*" hidden>
-<input type="file" id="rightInput" accept="image/*" hidden>
+<input type="file" id="coverInput" hidden>
+<input type="file" id="leftInput" hidden>
+<input type="file" id="rightInput" hidden>
 
 <!-- COVER -->
 <div class="cover" id="cover">
-  <span>Cover image</span>
+  <span>Click to upload cover</span>
+</div>
+<div class="editor" id="coverEditor">
+  Cover height
+  <input type="range" min="150" max="400" id="coverSize">
 </div>
 
 <div class="layout">
 
-  <!-- LEFT IMAGE -->
-  <img id="leftImg" class="side-img" alt="Left image">
+  <div>
+    <img id="leftImg" class="side-img">
+    <div class="editor">
+      Image size
+      <input type="range" min="80" max="240" id="leftSize">
+    </div>
+  </div>
 
-  <!-- CENTER -->
   <div class="center">
-    <h1 id="title" contenteditable="false">✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
+    <h1 contenteditable="false">✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
 
     <a class="link-btn" href="https://instagram.com/obscura001" target="_blank">
       <i class="fab fa-instagram"></i>&nbsp;Instagram
@@ -140,92 +157,81 @@ h1 {
     </div>
   </div>
 
-  <!-- RIGHT IMAGE -->
-  <img id="rightImg" class="side-img" alt="Right image">
+  <div>
+    <img id="rightImg" class="side-img">
+    <div class="editor">
+      Image size
+      <input type="range" min="80" max="240" id="rightSize">
+    </div>
+  </div>
 
 </div>
 
+<button id="editBtn">Enable Edit Mode</button>
+
 <script>
-/* 🔐 EDIT SETTINGS */
 let editMode = false;
-const EDIT_PASSWORD = "obs001edit"; // ← CHANGE THIS PASSWORD
+const PASSWORD = "obs001edit";
 
-/* ENABLE EDIT MODE (CTRL + E) */
-document.addEventListener("keydown", e => {
-  if (e.ctrlKey && e.key.toLowerCase() === "e") {
-    const pass = prompt("Enter edit password:");
-    if (pass === EDIT_PASSWORD) {
-      editMode = true;
-      alert("Edit mode enabled 🖤");
-      enableEditing();
-    } else {
-      alert("Wrong password");
-    }
+const cover = document.getElementById("cover");
+const leftImg = document.getElementById("leftImg");
+const rightImg = document.getElementById("rightImg");
+
+editBtn.onclick = () => {
+  const pass = prompt("Enter edit password:");
+  if (pass === PASSWORD) {
+    editMode = true;
+    alert("Edit mode unlocked 🖤");
+    document.querySelectorAll(".editor").forEach(e => e.style.display = "block");
+    document.querySelectorAll("[contenteditable]").forEach(e => e.contentEditable = true);
   }
-});
+};
 
-/* IMAGE UPLOAD HANDLER */
-function bindUpload(input, target, isCover=false) {
+/* IMAGE UPLOAD */
+function upload(input, fn) {
   input.onchange = e => {
     if (!editMode) return;
-    const file = e.target.files[0];
-    if (!file) return;
-
     const reader = new FileReader();
-    reader.onload = () => {
-      if (isCover) {
-        target.style.backgroundImage = `url('${reader.result}')`;
-        target.innerHTML = "";
-        localStorage.cover = reader.result;
-      } else {
-        target.src = reader.result;
-        localStorage[target.id] = reader.result;
-      }
-    };
-    reader.readAsDataURL(file);
+    reader.onload = () => fn(reader.result);
+    reader.readAsDataURL(e.target.files[0]);
   };
 }
 
-/* ELEMENTS */
-const cover = document.getElementById("cover");
-const coverInput = document.getElementById("coverInput");
-const leftImg = document.getElementById("leftImg");
-const leftInput = document.getElementById("leftInput");
-const rightImg = document.getElementById("rightImg");
-const rightInput = document.getElementById("rightInput");
+upload(coverInput, d => {
+  cover.style.backgroundImage = `url(${d})`;
+  cover.innerHTML = "";
+  localStorage.cover = d;
+});
 
-/* CLICK (LOCKED) */
+upload(leftInput, d => localStorage.left = leftImg.src = d);
+upload(rightInput, d => localStorage.right = rightImg.src = d);
+
 cover.onclick = () => editMode && coverInput.click();
 leftImg.onclick = () => editMode && leftInput.click();
 rightImg.onclick = () => editMode && rightInput.click();
 
-/* BIND UPLOADS */
-bindUpload(coverInput, cover, true);
-bindUpload(leftInput, leftImg);
-bindUpload(rightInput, rightImg);
+/* RESIZE */
+coverSize.oninput = e => {
+  cover.style.height = e.target.value + "px";
+  localStorage.coverSize = e.target.value;
+};
+leftSize.oninput = e => {
+  leftImg.style.width = e.target.value + "px";
+  localStorage.leftSize = e.target.value;
+};
+rightSize.oninput = e => {
+  rightImg.style.width = e.target.value + "px";
+  localStorage.rightSize = e.target.value;
+};
 
-/* ENABLE TEXT EDITING */
-function enableEditing() {
-  document.querySelectorAll("[contenteditable]").forEach(el => {
-    el.contentEditable = true;
-  });
-}
-
-/* RESTORE SAVED CONTENT */
+/* RESTORE */
 window.onload = () => {
-  if (localStorage.cover) {
-    cover.style.backgroundImage = `url('${localStorage.cover}')`;
-    cover.innerHTML = "";
-  }
-  if (localStorage.leftImg) leftImg.src = localStorage.leftImg;
-  if (localStorage.rightImg) rightImg.src = localStorage.rightImg;
-
-  document.querySelectorAll("[contenteditable]").forEach((el,i)=>{
-    if (localStorage["text"+i]) el.innerText = localStorage["text"+i];
-    el.oninput = () => {
-      if (editMode) localStorage["text"+i] = el.innerText;
-    };
-  });
+  if (localStorage.cover) cover.style.backgroundImage = `url(${localStorage.cover})`;
+  if (localStorage.left) leftImg.src = localStorage.left;
+  if (localStorage.right) rightImg.src = localStorage.right;
+  if (localStorage.coverSize) cover.style.height = localStorage.coverSize + "px";
+  if (localStorage.leftSize) leftImg.style.width = localStorage.leftSize + "px";
+  if (localStorage.rightSize) rightImg.style.width = localStorage.rightSize + "px";
 };
 </script>
 
