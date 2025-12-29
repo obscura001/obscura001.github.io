@@ -15,7 +15,7 @@ body {
   user-select:none;
 }
 .cover {
-  height:230px;
+  height:350px; /* increased cover height */
   background:#111;
   background-size:cover;
   background-position:center;
@@ -25,14 +25,14 @@ body {
   cursor:pointer;
   position:relative;
 }
-.cover span{color:#666;font-size:14px;}
+.cover span{color:#666;font-size:16px;}
 .layout{
   display:grid;
-  grid-template-columns:1fr 340px 1fr;
-  max-width:900px;
-  margin:30px auto;
-  gap:20px;
-  padding:0 12px;
+  grid-template-columns:1fr 500px 1fr; /* wider middle column */
+  max-width:1200px; /* increased max width */
+  margin:40px auto;
+  gap:30px;
+  padding:0 20px;
 }
 .side-wrap{
   display:flex;
@@ -41,18 +41,17 @@ body {
   position:relative;
 }
 .side-img{
-  width:140px;
-  height:180px;
+  width:200px; /* larger default width */
+  height:250px; /* larger default height */
   border-radius:14px;
   background:#111;
   object-fit:cover;
   cursor:pointer;
   position:absolute;
 }
-.side-img.loaded::after{content:"";}
 .resize-handle{
-  width:12px;
-  height:12px;
+  width:14px;
+  height:14px;
   background:#fff;
   position:absolute;
   bottom:0;
@@ -62,32 +61,33 @@ body {
   display:none;
 }
 .center{text-align:center;position:relative;}
-h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
+h1{ font-family:'Cinzel', serif; font-size:32px; margin-bottom:40px; }
 .link-btn{
   display:flex;
-  justify-content:center;
+  justify-content:flex-start;
   align-items:center;
-  max-width:300px;
-  margin:12px auto 4px;
-  padding:15px;
+  width:400px; /* bigger buttons */
+  margin:14px auto 6px;
+  padding:18px 24px;
   background:white;
   color:black;
   text-decoration:none;
   border-radius:30px;
   font-weight:bold;
   position:absolute;
+  cursor:grab;
 }
-.link-btn .fa{ margin-right:8px; }
-.text-block{ font-size:14px; color:#ccc; margin-bottom:22px; }
+.link-btn .fa{ margin-right:16px; font-size:20px;}
+.text-block{ font-size:16px; color:#ccc; margin-bottom:28px; }
 #editBtn{
   position:fixed;
   bottom:10px;
   right:10px;
   background:#111;color:#888;
   border:1px solid #333;
-  padding:8px 12px;
+  padding:10px 14px;
   cursor:pointer;
-  font-size:12px;
+  font-size:14px;
 }
 #uploadBox{
   display:none;
@@ -95,15 +95,15 @@ h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
   bottom:10px;
   left:10px;
   background:#111;
-  padding:5px;
+  padding:6px;
   border:1px solid #333;
   border-radius:5px;
-  font-size:12px;
+  font-size:14px;
   cursor:pointer;
   color:#ccc;
 }
-.edit-icon{display:none; margin-left:6px; cursor:pointer; font-size:12px;}
-@media(max-width:768px){
+.edit-color{display:none; margin-left:6px; cursor:pointer; font-size:14px;}
+@media(max-width:1024px){
   .layout{grid-template-columns:1fr;}
   .side-img,.link-btn{position:relative;}
 }
@@ -131,19 +131,19 @@ h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
 
     <a class="link-btn" id="social1" href="https://instagram.com/obscura001" target="_blank">
       <i class="fab fa-instagram" id="icon1"></i>Instagram
-      <i class="fa fa-edit edit-icon" id="editIcon1" title="Change icon"></i>
+      <input type="color" class="edit-color" id="color1" title="Change color">
     </a>
     <div class="text-block" contenteditable="false" id="text1">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
 
     <a class="link-btn" id="social2" href="https://tiktok.com/@obscura097" target="_blank">
       <i class="fab fa-tiktok" id="icon2"></i>TikTok
-      <i class="fa fa-edit edit-icon" id="editIcon2" title="Change icon"></i>
+      <input type="color" class="edit-color" id="color2" title="Change color">
     </a>
-    <div class="text-block" contenteditable="false" id="text2">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
+    <div class="text-block" contenteditable="false" id="text2">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴜᴇꜱᴛɪᴏɴꜱ!!</div>
 
     <a class="link-btn" id="social3" href="https://pinterest.com/obscura001" target="_blank">
       <i class="fab fa-pinterest" id="icon3"></i>Pinterest
-      <i class="fa fa-edit edit-icon" id="editIcon3" title="Change icon"></i>
+      <input type="color" class="edit-color" id="color3" title="Change color">
     </a>
     <div class="text-block" contenteditable="false" id="text3">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
   </div>
@@ -177,7 +177,7 @@ function enableEditMode(){
   editMode=true;
   document.querySelectorAll("[contenteditable]").forEach(e=>e.contentEditable=true);
   document.querySelectorAll(".resize-handle").forEach(h=>h.style.display="block");
-  document.querySelectorAll(".edit-icon").forEach(e=>e.style.display="inline-block");
+  document.querySelectorAll(".edit-color").forEach(e=>e.style.display="inline-block");
   uploadBox.style.display="block";
   cover.onclick=()=>coverInput.click();
   leftImg.onclick=()=>leftInput.click();
@@ -219,7 +219,6 @@ function addExtraImage(src){
   document.body.appendChild(handle);
   makeDraggable(img);
   makeResizable(img,handle);
-  restoreExtraImage(img,handle);
 }
 
 /* DRAG */
@@ -270,14 +269,23 @@ function makeResizable(el,handle){
   };
 }
 
-/* SOCIAL ICON EDIT */
-function editSocialIcon(iconEl){
-  if(!editMode) return;
-  const newClass=prompt("Enter new Font Awesome class (e.g. fab fa-twitter)");
-  if(newClass){
-    iconEl.className=newClass;
-  }
+/* SOCIAL COLOR EDIT */
+function editSocialColor(inputEl, iconEl){
+  inputEl.oninput = ()=>{ iconEl.style.color = inputEl.value; };
 }
+
+/* INITIALIZE */
+makeDraggable(leftImg);
+makeDraggable(rightImg);
+makeDraggable(cover);
+makeResizable(leftImg,leftHandle);
+makeResizable(rightImg,rightHandle);
+makeResizable(cover,coverHandle);
+
+/* APPLY COLOR EDITS */
+editSocialColor(document.getElementById("color1"), document.getElementById("icon1"));
+editSocialColor(document.getElementById("color2"), document.getElementById("icon2"));
+editSocialColor(document.getElementById("color3"), document.getElementById("icon3"));
 
 /* RESTORE SAVED DATA */
 window.onload=()=>{
@@ -288,14 +296,9 @@ window.onload=()=>{
   if(localStorage.rightImg+'Width' in localStorage){ rightImg.style.width=localStorage[rightImg.id+'Width']; rightImg.style.height=localStorage[rightImg.id+'Height']; }
   if(localStorage.cover+'Width' in localStorage){ cover.style.height=localStorage[cover.id+'Height']; }
 };
-
-/* ADD CLICK HANDLERS FOR ICON EDIT */
-document.getElementById("editIcon1").onclick=()=>editSocialIcon(document.getElementById("icon1"));
-document.getElementById("editIcon2").onclick=()=>editSocialIcon(document.getElementById("icon2"));
-document.getElementById("editIcon3").onclick=()=>editSocialIcon(document.getElementById("icon3"));
-
 </script>
 </body>
 </html>
+
 
   
