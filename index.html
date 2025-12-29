@@ -27,7 +27,6 @@ body {
   justify-content: center;
   cursor: pointer;
 }
-
 .cover span { color:#666; font-size:14px; }
 
 .layout {
@@ -58,13 +57,7 @@ body {
   justify-content: center;
   position: absolute;
 }
-
-.side-img::after {
-  content: "Upload image";
-  color: #666;
-  font-size: 13px;
-}
-
+.side-img::after { content: "Upload image"; color: #666; font-size: 13px; }
 .side-img.loaded::after { content: ""; }
 
 .center { text-align:center; position:relative; }
@@ -135,16 +128,49 @@ h1 { font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
       <i class="fab fa-instagram" id="icon1"></i>&nbsp;Instagram
     </a>
     <div class="text-block" contenteditable="false" id="text1">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
+    <div class="editor" id="editor1">
+      Icon <select id="iconSelect1">
+        <option value="fab fa-instagram">Instagram</option>
+        <option value="fab fa-tiktok">TikTok</option>
+        <option value="fab fa-pinterest">Pinterest</option>
+        <option value="fab fa-facebook">Facebook</option>
+        <option value="fab fa-twitter">Twitter</option>
+      </select>
+      Color <input type="color" id="iconColor1">
+      Size <input type="range" min="14" max="48" id="iconSize1">
+    </div>
 
     <a class="link-btn" id="social2" href="https://tiktok.com/@obscura097" target="_blank">
       <i class="fab fa-tiktok" id="icon2"></i>&nbsp;TikTok
     </a>
     <div class="text-block" contenteditable="false" id="text2">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
+    <div class="editor" id="editor2">
+      Icon <select id="iconSelect2">
+        <option value="fab fa-instagram">Instagram</option>
+        <option value="fab fa-tiktok">TikTok</option>
+        <option value="fab fa-pinterest">Pinterest</option>
+        <option value="fab fa-facebook">Facebook</option>
+        <option value="fab fa-twitter">Twitter</option>
+      </select>
+      Color <input type="color" id="iconColor2">
+      Size <input type="range" min="14" max="48" id="iconSize2">
+    </div>
 
     <a class="link-btn" id="social3" href="https://pinterest.com/obscura001" target="_blank">
       <i class="fab fa-pinterest" id="icon3"></i>&nbsp;Pinterest
     </a>
     <div class="text-block" contenteditable="false" id="text3">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
+    <div class="editor" id="editor3">
+      Icon <select id="iconSelect3">
+        <option value="fab fa-instagram">Instagram</option>
+        <option value="fab fa-tiktok">TikTok</option>
+        <option value="fab fa-pinterest">Pinterest</option>
+        <option value="fab fa-facebook">Facebook</option>
+        <option value="fab fa-twitter">Twitter</option>
+      </select>
+      Color <input type="color" id="iconColor3">
+      Size <input type="range" min="14" max="48" id="iconSize3">
+    </div>
   </div>
 
   <!-- RIGHT IMAGE -->
@@ -160,38 +186,40 @@ h1 { font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
 <button id="editBtn">Enable Edit Mode</button>
 
 <script>
-let editMode = false;
-const PASSWORD = "obs001edit";
+let editMode=false;
+const PASSWORD="obs001edit";
 
-/* ELEMENTS */
-const cover = document.getElementById("cover");
-const leftImg = document.getElementById("leftImg");
-const rightImg = document.getElementById("rightImg");
-const coverInput = document.getElementById("coverInput");
-const leftInput = document.getElementById("leftInput");
-const rightInput = document.getElementById("rightInput");
+const cover=document.getElementById("cover");
+const leftImg=document.getElementById("leftImg");
+const rightImg=document.getElementById("rightImg");
+const coverInput=document.getElementById("coverInput");
+const leftInput=document.getElementById("leftInput");
+const rightInput=document.getElementById("rightInput");
 
 /* EDIT MODE */
-editBtn.onclick = () => {
-  const pass = prompt("Enter edit password");
+editBtn.onclick=()=>{
+  const pass=prompt("Enter edit password");
   if(pass===PASSWORD){
     editMode=true;
     alert("Edit mode unlocked 🖤");
     document.querySelectorAll(".editor").forEach(e=>e.style.display="block");
     document.querySelectorAll("[contenteditable]").forEach(e=>e.contentEditable=true);
 
-    /* MAKE DRAGGABLE */
+    // draggable
     makeDraggable(leftImg); makeDraggable(rightImg);
     [1,2,3].forEach(i=>makeDraggable(document.getElementById("social"+i)));
-  } else alert("Wrong password");
+
+    // social icon customization
+    [1,2,3].forEach(setupIcon);
+  }else alert("Wrong password");
 };
 
 /* IMAGE UPLOAD */
 function upload(input,img,key){
-  input.onchange = e=>{
+  input.onchange=e=>{
     if(!editMode) return;
-    const reader = new FileReader();
-    reader.onload = ()=>{ img.src=reader.result; img.classList.add("loaded"); localStorage[key]=reader.result; };
+    const reader=new FileReader();
+    reader.onload=()=>{ img.src=reader.result; img.classList.add("loaded"); localStorage[key]=reader.result; };
     reader.readAsDataURL(e.target.files[0]);
   };
 }
@@ -199,57 +227,58 @@ upload(coverInput,cover,'cover');
 upload(leftInput,leftImg,'leftImg');
 upload(rightInput,rightImg,'rightImg');
 
-cover.onclick = ()=> editMode && coverInput.click();
-leftImg.onclick = ()=> editMode && leftInput.click();
-rightImg.onclick = ()=> editMode && rightInput.click();
+cover.onclick=()=>editMode&&coverInput.click();
+leftImg.onclick=()=>editMode&&leftInput.click();
+rightImg.onclick=()=>editMode&&rightInput.click();
 
 /* IMAGE RESIZE */
-const coverSize=document.getElementById("coverSize");
-coverSize.oninput=e=>{ cover.style.height=e.target.value+"px"; localStorage.coverSize=e.target.value; };
-const leftSize=document.getElementById("leftSize");
-leftSize.oninput=e=>{ leftImg.style.width=e.target.value+"px"; localStorage.leftSize=e.target.value; };
-const rightSize=document.getElementById("rightSize");
-rightSize.oninput=e=>{ rightImg.style.width=e.target.value+"px"; localStorage.rightSize=e.target.value; };
+document.getElementById("coverSize").oninput=e=>{cover.style.height=e.target.value+"px"; localStorage.coverSize=e.target.value;};
+document.getElementById("leftSize").oninput=e=>{leftImg.style.width=e.target.value+"px"; localStorage.leftSize=e.target.value;};
+document.getElementById("rightSize").oninput=e=>{rightImg.style.width=e.target.value+"px"; localStorage.rightSize=e.target.value;};
 
 /* SOCIAL ICON CUSTOMIZATION */
 function setupIcon(i){
   const icon=document.getElementById("icon"+i);
-  // default saved values
+  const sel=document.getElementById("iconSelect"+i);
+  const col=document.getElementById("iconColor"+i);
+  const sz=document.getElementById("iconSize"+i);
+
+  // restore
+  if(localStorage["icon"+i]) icon.className=localStorage["icon"+i];
   if(localStorage["iconColor"+i]) icon.style.color=localStorage["iconColor"+i];
   if(localStorage["iconSize"+i]) icon.style.fontSize=localStorage["iconSize"+i]+"px";
-}
-[1,2,3].forEach(setupIcon);
 
-/* DRAGGABLE FUNCTION */
+  sel.onchange=()=>{ icon.className=sel.value; localStorage["icon"+i]=sel.value; };
+  col.oninput=()=>{ icon.style.color=col.value; localStorage["iconColor"+i]=col.value; };
+  sz.oninput=()=>{ icon.style.fontSize=sz.value+"px"; localStorage["iconSize"+i]=sz.value; };
+}
+
+/* DRAGGABLE */
 function makeDraggable(el){
   el.onmousedown=function(e){
     if(!editMode) return;
     let shiftX=e.clientX-el.getBoundingClientRect().left;
     let shiftY=e.clientY-el.getBoundingClientRect().top;
-
     function moveAt(pageX,pageY){
       el.style.position="absolute";
       el.style.zIndex=1000;
       el.style.left=pageX-shiftX+"px";
       el.style.top=pageY-shiftY+"px";
     }
-
     function onMouseMove(e){ moveAt(e.pageX,e.pageY); }
-
     document.addEventListener('mousemove',onMouseMove);
     document.onmouseup=function(){
       document.removeEventListener('mousemove',onMouseMove);
       document.onmouseup=null;
-      // save position
       localStorage[el.id+'Left']=el.style.left;
       localStorage[el.id+'Top']=el.style.top;
     };
   };
-  el.ondragstart = ()=>false;
+  el.ondragstart=()=>false;
 }
 
 /* RESTORE */
-window.onload = ()=>{
+window.onload=()=>{
   if(localStorage.cover){ cover.style.backgroundImage=`url(${localStorage.cover})`; cover.innerHTML=""; }
   if(localStorage.leftImg){ leftImg.src=localStorage.leftImg; leftImg.classList.add("loaded"); }
   if(localStorage.rightImg){ rightImg.src=localStorage.rightImg; rightImg.classList.add("loaded"); }
@@ -271,5 +300,4 @@ window.onload = ()=>{
 </script>
 </body>
 </html>
-
 
