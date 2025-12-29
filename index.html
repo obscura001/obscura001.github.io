@@ -14,7 +14,6 @@ body {
   font-family:'Playfair Display', serif;
   user-select:none;
 }
-
 .cover {
   height:230px;
   background:#111;
@@ -24,9 +23,9 @@ body {
   align-items:center;
   justify-content:center;
   cursor:pointer;
+  position:relative;
 }
 .cover span{color:#666;font-size:14px;}
-
 .layout{
   display:grid;
   grid-template-columns:1fr 340px 1fr;
@@ -35,14 +34,12 @@ body {
   gap:20px;
   padding:0 12px;
 }
-
 .side-wrap{
   display:flex;
   flex-direction:column;
   align-items:center;
   position:relative;
 }
-
 .side-img{
   width:140px;
   height:180px;
@@ -50,18 +47,22 @@ body {
   background:#111;
   object-fit:cover;
   cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   position:absolute;
 }
-.side-img::after{content:"Upload image"; color:#666; font-size:13px;}
 .side-img.loaded::after{content:"";}
-
-.center{ text-align:center; position:relative; }
-
+.resize-handle{
+  width:12px;
+  height:12px;
+  background:#fff;
+  position:absolute;
+  bottom:0;
+  right:0;
+  cursor:se-resize;
+  border-radius:2px;
+  display:none;
+}
+.center{text-align:center;position:relative;}
 h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
-
 .link-btn{
   display:flex;
   justify-content:center;
@@ -76,27 +77,17 @@ h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
   font-weight:bold;
   position:absolute;
 }
-
 .text-block{ font-size:14px; color:#ccc; margin-bottom:22px; }
-
-.editor{ display:none; margin-top:6px; font-size:12px; color:#aaa; }
-
-.arrow-controls{
-  display:none;
-  position:absolute;
-  top:-30px;
-  left:50%;
-  transform:translateX(-50%);
-  gap:2px;
-}
-
-.arrow-controls button{
-  font-size:12px;
-  padding:2px 4px;
-  margin:1px;
+#editBtn{
+  position:fixed;
+  bottom:10px;
+  right:10px;
+  background:#111;color:#888;
+  border:1px solid #333;
+  padding:8px 12px;
   cursor:pointer;
+  font-size:12px;
 }
-
 #uploadBox{
   display:none;
   position:fixed;
@@ -110,21 +101,9 @@ h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
   cursor:pointer;
   color:#ccc;
 }
-
-#editBtn{
-  position:fixed;
-  bottom:10px;
-  right:10px;
-  background:#111; color:#888;
-  border:1px solid #333;
-  padding:8px 12px;
-  cursor:pointer;
-  font-size:12px;
-}
-
 @media(max-width:768px){
   .layout{grid-template-columns:1fr;}
-  .side-img, .link-btn{position:relative;}
+  .side-img,.link-btn{position:relative;}
 }
 </style>
 </head>
@@ -135,23 +114,16 @@ h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
 <input type="file" id="rightInput" hidden>
 <input type="file" id="extraInput" hidden>
 
-<div class="cover" id="cover"><span>Click to upload cover</span></div>
+<div class="cover" id="cover"><span>Click to upload cover</span>
+  <div class="resize-handle" id="coverHandle"></div>
+</div>
 
 <div class="layout">
-  <!-- Left Image -->
   <div class="side-wrap">
     <img id="leftImg" class="side-img">
-    <div class="arrow-controls" id="leftArrows">
-      <button data-action="up">↑</button>
-      <button data-action="down">↓</button>
-      <button data-action="left">←</button>
-      <button data-action="right">→</button>
-      <button data-action="wider">⇆</button>
-      <button data-action="narrow">⇋</button>
-    </div>
+    <div class="resize-handle" id="leftHandle"></div>
   </div>
 
-  <!-- Center -->
   <div class="center">
     <h1 contenteditable="false" id="title">✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
 
@@ -171,22 +143,13 @@ h1{ font-family:'Cinzel', serif; font-size:26px; margin-bottom:30px; }
     <div class="text-block" contenteditable="false" id="text3">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
   </div>
 
-  <!-- Right Image -->
   <div class="side-wrap">
     <img id="rightImg" class="side-img">
-    <div class="arrow-controls" id="rightArrows">
-      <button data-action="up">↑</button>
-      <button data-action="down">↓</button>
-      <button data-action="left">←</button>
-      <button data-action="right">→</button>
-      <button data-action="wider">⇆</button>
-      <button data-action="narrow">⇋</button>
-    </div>
+    <div class="resize-handle" id="rightHandle"></div>
   </div>
 </div>
 
 <div id="uploadBox">Upload Extra Image</div>
-
 <button id="editBtn">Enable Edit Mode</button>
 
 <script>
@@ -196,44 +159,44 @@ const PASSWORD="obs001edit";
 const cover=document.getElementById("cover");
 const leftImg=document.getElementById("leftImg");
 const rightImg=document.getElementById("rightImg");
+const coverHandle=document.getElementById("coverHandle");
+const leftHandle=document.getElementById("leftHandle");
+const rightHandle=document.getElementById("rightHandle");
 const coverInput=document.getElementById("coverInput");
 const leftInput=document.getElementById("leftInput");
 const rightInput=document.getElementById("rightInput");
 const extraInput=document.getElementById("extraInput");
 const uploadBox=document.getElementById("uploadBox");
 
-editBtn.onclick=()=>{
+function enableEditMode(){
+  editMode=true;
+  document.querySelectorAll("[contenteditable]").forEach(e=>e.contentEditable=true);
+  document.querySelectorAll(".resize-handle").forEach(h=>h.style.display="block");
+  uploadBox.style.display="block";
+  cover.onclick=()=>coverInput.click();
+  leftImg.onclick=()=>leftInput.click();
+  rightImg.onclick=()=>rightInput.click();
+}
+document.getElementById("editBtn").onclick=()=>{
   const pass=prompt("Enter edit password");
-  if(pass===PASSWORD){
-    editMode=true;
-    alert("Edit mode unlocked 🖤");
-    document.querySelectorAll("[contenteditable]").forEach(e=>e.contentEditable=true);
-    document.querySelectorAll(".arrow-controls").forEach(e=>e.style.display="flex");
-    uploadBox.style.display="block";
-    // click-to-upload images
-    cover.onclick=()=>coverInput.click();
-    leftImg.onclick=()=>leftInput.click();
-    rightImg.onclick=()=>rightInput.click();
-  }else alert("Wrong password");
+  if(pass===PASSWORD){enableEditMode();alert("Edit mode unlocked 🖤");}else alert("Wrong password");
 };
 
-/* UPLOAD */
-function upload(input,img,key){
+/* UPLOAD IMAGES */
+function upload(input,img){
   input.onchange=e=>{
     const reader=new FileReader();
     reader.onload=()=>{
-      if(img) { img.src=reader.result; img.classList.add("loaded"); localStorage[key]=reader.result; }
+      if(img){ img.src=reader.result; img.classList.add("loaded"); localStorage[img.id]=reader.result; }
       else addExtraImage(reader.result);
     };
     reader.readAsDataURL(e.target.files[0]);
   };
 }
-
-upload(coverInput,cover,'cover');
-upload(leftInput,leftImg,'leftImg');
-upload(rightInput,rightImg,'rightImg');
-upload(extraInput,null,null);
-
+upload(coverInput,cover);
+upload(leftInput,leftImg);
+upload(rightInput,rightImg);
+upload(extraInput,null);
 uploadBox.onclick=()=>extraInput.click();
 
 /* ADD EXTRA IMAGE */
@@ -243,11 +206,16 @@ function addExtraImage(src){
   img.className="side-img loaded";
   img.style.left="50px";
   img.style.top="50px";
+  const handle=document.createElement("div");
+  handle.className="resize-handle";
+  img.parentNode=document.body;
   document.body.appendChild(img);
+  document.body.appendChild(handle);
   makeDraggable(img);
+  makeResizable(img,handle);
 }
 
-/* DRAG & DROP FUNCTION */
+/* DRAG */
 function makeDraggable(el){
   el.onmousedown=function(e){
     if(!editMode) return;
@@ -255,49 +223,59 @@ function makeDraggable(el){
     let shiftY=e.clientY-el.getBoundingClientRect().top;
     function moveAt(pageX,pageY){
       el.style.position="absolute";
-      el.style.zIndex=1000;
       el.style.left=pageX-shiftX+"px";
       el.style.top=pageY-shiftY+"px";
+      el.style.zIndex=1000;
     }
     function onMouseMove(e){ moveAt(e.pageX,e.pageY); }
     document.addEventListener('mousemove',onMouseMove);
     document.onmouseup=function(){
       document.removeEventListener('mousemove',onMouseMove);
       document.onmouseup=null;
+      localStorage[el.id+'Left']=el.style.left;
+      localStorage[el.id+'Top']=el.style.top;
     };
   };
   el.ondragstart=()=>false;
 }
 
-/* ARROW CONTROLS */
-function setupArrows(img,arrows){
-  arrows.querySelectorAll("button").forEach(btn=>{
-    btn.onclick=()=>{
-      const step=10;
-      let wStep=10;
-      const rect=img.getBoundingClientRect();
-      switch(btn.dataset.action){
-        case"up": img.style.top=(rect.top - step)+"px"; break;
-        case"down": img.style.top=(rect.top + step)+"px"; break;
-        case"left": img.style.left=(rect.left - step)+"px"; break;
-        case"right": img.style.left=(rect.left + step)+"px"; break;
-        case"wider": img.style.width=(img.offsetWidth + wStep)+"px"; break;
-        case"narrow": img.style.width=(img.offsetWidth - wStep)+"px"; break;
-      }
+/* RESIZE */
+function makeResizable(el,handle){
+  handle.onmousedown=function(e){
+    if(!editMode){return;}
+    e.preventDefault();
+    const startX=e.clientX;
+    const startWidth=el.offsetWidth;
+    document.onmousemove=function(e){
+      const newWidth=startWidth+(e.clientX-startX);
+      el.style.width=newWidth+"px";
     };
-  });
+    document.onmouseup=function(){
+      document.onmousemove=null;
+      document.onmouseup=null;
+      localStorage[el.id+'Width']=el.style.width;
+    };
+  };
 }
 
-setupArrows(leftImg,document.getElementById("leftArrows"));
-setupArrows(rightImg,document.getElementById("rightArrows"));
+/* INITIALIZE DRAG/RESIZE */
+makeDraggable(leftImg);
+makeDraggable(rightImg);
+makeDraggable(cover);
+makeResizable(leftImg,leftHandle);
+makeResizable(rightImg,rightHandle);
+makeResizable(cover,coverHandle);
 
 /* RESTORE */
 window.onload=()=>{
   if(localStorage.cover){ cover.style.backgroundImage=`url(${localStorage.cover})`; cover.innerHTML=""; }
   if(localStorage.leftImg){ leftImg.src=localStorage.leftImg; leftImg.classList.add("loaded"); }
   if(localStorage.rightImg){ rightImg.src=localStorage.rightImg; rightImg.classList.add("loaded"); }
+  if(localStorage.leftImg+'Width' in localStorage){ leftImg.style.width=localStorage.leftImg+'Width'; }
+  if(localStorage.rightImg+'Width' in localStorage){ rightImg.style.width=localStorage.rightImg+'Width'; }
 };
 </script>
 </body>
 </html>
 
+  
