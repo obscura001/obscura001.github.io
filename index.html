@@ -20,7 +20,7 @@ body{
 /* COVER */
 .cover{
   width:100%;
-  height:140px; /* SHORT ON PURPOSE */
+  height:140px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -34,7 +34,6 @@ body{
   object-fit:contain;
 }
 
-/* COVER UPLOAD */
 .cover input{
   position:absolute;
   bottom:8px;
@@ -58,10 +57,11 @@ h1{
   z-index:5;
 }
 
-/* SOCIAL BLOCK */
+/* SOCIAL GROUP */
 .social-group{
   margin-bottom:38px;
   text-align:center;
+  position:relative;
 }
 
 /* BUTTON */
@@ -84,6 +84,14 @@ h1{
 .link-btn i{
   font-size:22px;
   margin-right:16px;
+}
+
+/* ICON COLOR PICKER */
+.icon-color{
+  position:absolute;
+  right:-42px;
+  top:18px;
+  display:none;
 }
 
 /* TEXT */
@@ -134,7 +142,8 @@ h1{
 /* EDIT MODE */
 .editing .resize,
 .editing .upload-box,
-.editing .cover input{
+.editing .cover input,
+.editing .icon-color{
   display:block;
 }
 
@@ -155,13 +164,14 @@ h1{
 @media(max-width:900px){
   .edit-image{ display:none; }
   .link-btn{ width:90%; }
+  .icon-color{ display:none !important; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- COVER IMAGE -->
+<!-- COVER -->
 <div class="cover">
   <img id="coverImg" src="cover.png">
   <input type="file" id="coverUpload">
@@ -170,14 +180,14 @@ h1{
 <h1>✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
 
 <!-- LEFT IMAGE -->
-<div class="edit-image left" id="imgL">
+<div class="edit-image left">
   <img src="left.jpg">
   <div class="resize"></div>
   <input type="file" class="upload-box">
 </div>
 
 <!-- RIGHT IMAGE -->
-<div class="edit-image right" id="imgR">
+<div class="edit-image right">
   <img src="right.jpg">
   <div class="resize"></div>
   <input type="file" class="upload-box">
@@ -190,6 +200,7 @@ h1{
     <a class="link-btn" href="https://instagram.com/obscura001" target="_blank">
       <i class="fa-brands fa-instagram"></i> Instagram
     </a>
+    <input type="color" class="icon-color">
     <div class="text-block">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
   </div>
 
@@ -197,6 +208,7 @@ h1{
     <a class="link-btn" href="https://tiktok.com/@obscura097" target="_blank">
       <i class="fa-brands fa-tiktok"></i> TikTok
     </a>
+    <input type="color" class="icon-color">
     <div class="text-block">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
   </div>
 
@@ -204,6 +216,7 @@ h1{
     <a class="link-btn" href="https://pinterest.com/obscura001" target="_blank">
       <i class="fa-brands fa-pinterest"></i> Pinterest
     </a>
+    <input type="color" class="icon-color">
     <div class="text-block">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
   </div>
 
@@ -230,6 +243,13 @@ document.getElementById("coverUpload").onchange=e=>{
   r.onload=()=>document.getElementById("coverImg").src=r.result;
   r.readAsDataURL(e.target.files[0]);
 };
+
+/* ICON COLOR */
+document.querySelectorAll(".social-group").forEach(group=>{
+  let picker=group.querySelector(".icon-color");
+  let icon=group.querySelector("i");
+  picker.oninput=()=>icon.style.color=picker.value;
+});
 
 /* IMAGE MOVE + RESIZE */
 document.querySelectorAll(".edit-image").forEach(box=>{
