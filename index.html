@@ -3,19 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>✦ Obscura 001 hub ✦</title>
+<title>✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
-body {
+body{
   margin:0;
-  background: linear-gradient(135deg,#000,#2a2a2a);
+  background:linear-gradient(135deg,#050505,#1e1e1e);
   color:white;
-  font-family:'Playfair Display', serif;
-  user-select:none;
+  font-family:'Playfair Display',serif;
 }
-.cover {
-  height:200px; /* smaller cover */
+
+/* COVER */
+.cover{
+  height:180px;
   background:#111;
   background-size:cover;
   background-position:center;
@@ -23,284 +26,202 @@ body {
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  position:relative;
 }
-.cover span{color:#666;font-size:14px;}
-.layout{
-  display:grid;
-  grid-template-columns:1fr 400px 1fr;
-  max-width:1000px;
-  margin:30px auto;
-  gap:40px;
+.cover span{color:#666;font-size:14px}
+
+/* LAYOUT */
+.wrapper{
+  max-width:1100px;
+  margin:40px auto;
   padding:0 20px;
 }
-.side-wrap{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+.main{
+  display:grid;
+  grid-template-columns:1fr 420px 1fr;
+  gap:40px;
+}
+
+/* SIDE IMAGES */
+.side-img{
+  width:260px;
+  height:360px;
+  object-fit:cover;
+  border-radius:16px;
+  cursor:grab;
   position:relative;
 }
-.side-img{
-  width:220px;  /* bigger default width */
-  height:300px; /* bigger default height */
-  border-radius:14px;
-  background:#111;
-  object-fit:cover;
-  cursor:pointer;
-  position:absolute;
-}
-.resize-handle{
-  width:14px;
-  height:14px;
+.resize{
+  width:16px;
+  height:16px;
   background:#fff;
   position:absolute;
   bottom:0;
   right:0;
   cursor:se-resize;
-  border-radius:2px;
   display:none;
 }
-.center{text-align:center;position:relative;}
-h1{ font-family:'Cinzel', serif; font-size:32px; margin-bottom:40px; }
+
+/* CENTER */
+.center{text-align:center}
+h1{
+  font-family:'Cinzel',serif;
+  font-size:34px;
+  margin-bottom:60px;
+}
+
+/* SOCIALS */
+.social-group{
+  margin-bottom:90px;
+}
+
 .link-btn{
   display:flex;
-  justify-content:flex-start;
   align-items:center;
-  width:300px;
-  height:60px; /* taller button */
-  line-height:60px;
-  margin:20px auto; /* more spacing vertically */
-  padding:0 24px;
+  justify-content:flex-start;
+  width:380px;
+  height:96px;
+  padding:0 28px;
   background:white;
   color:black;
-  text-decoration:none;
-  border-radius:30px;
+  border-radius:40px;
+  font-size:22px;
   font-weight:bold;
-  position:absolute;
-  cursor:grab;
+  text-decoration:none;
 }
-.link-btn .fa{ margin-right:16px; font-size:20px;}
-.text-block{ font-size:16px; color:#ccc; margin-bottom:30px; }
+
+.link-btn i{
+  font-size:28px;
+  margin-right:20px;
+}
+
+.text-block{
+  margin-top:18px;
+  font-size:18px;
+  color:#ccc;
+}
+
+/* EDIT UI */
 #editBtn{
   position:fixed;
-  bottom:10px;
-  right:10px;
-  background:#111;color:#888;
+  bottom:12px;
+  right:12px;
+  background:#111;
   border:1px solid #333;
+  color:#aaa;
   padding:10px 14px;
   cursor:pointer;
-  font-size:14px;
 }
+
 #uploadBox{
   display:none;
   position:fixed;
-  bottom:10px;
-  left:10px;
+  bottom:12px;
+  left:12px;
   background:#111;
-  padding:6px;
   border:1px solid #333;
-  border-radius:5px;
-  font-size:14px;
+  color:#aaa;
+  padding:8px;
   cursor:pointer;
-  color:#ccc;
 }
-.edit-color{display:none; margin-left:6px; cursor:pointer; font-size:14px;}
-@media(max-width:1024px){
-  .layout{grid-template-columns:1fr;}
-  .side-img,.link-btn{position:relative;}
+
+.resize.show{display:block}
+
+@media(max-width:900px){
+  .main{grid-template-columns:1fr}
 }
 </style>
 </head>
+
 <body>
 
 <input type="file" id="coverInput" hidden>
 <input type="file" id="leftInput" hidden>
 <input type="file" id="rightInput" hidden>
-<input type="file" id="extraInput" hidden>
 
-<div class="cover" id="cover"><span>Click to upload cover</span>
-  <div class="resize-handle" id="coverHandle"></div>
-</div>
+<div class="cover" id="cover"><span>click to upload cover</span></div>
 
-<div class="layout">
-  <div class="side-wrap">
+<div class="wrapper">
+  <div class="main">
+
     <img id="leftImg" class="side-img">
-    <div class="resize-handle" id="leftHandle"></div>
-  </div>
+    <div class="center">
 
-  <div class="center">
-    <h1 contenteditable="false" id="title">✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
+      <h1>✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
 
-    <a class="link-btn" id="social1" href="https://instagram.com/obscura001" target="_blank">
-      <i class="fab fa-instagram" id="icon1"></i>Instagram
-      <input type="color" class="edit-color" id="color1" title="Change color">
-    </a>
-    <div class="text-block" contenteditable="false" id="text1">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
+      <div class="social-group">
+        <a class="link-btn" href="https://instagram.com/obscura001" target="_blank">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <div class="text-block">ᴀᴅᴅ ᴍʏ ꜱᴏᴄɪᴀʟꜱ!!</div>
+      </div>
 
-    <a class="link-btn" id="social2" href="https://tiktok.com/@obscura097" target="_blank">
-      <i class="fab fa-tiktok" id="icon2"></i>TikTok
-      <input type="color" class="edit-color" id="color2" title="Change color">
-    </a>
-    <div class="text-block" contenteditable="false" id="text2">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
+      <div class="social-group">
+        <a class="link-btn" href="https://tiktok.com/@obscura097" target="_blank">
+          <i class="fab fa-tiktok"></i> TikTok
+        </a>
+        <div class="text-block">ᴅᴍ ꜰᴏʀ ᴀɴʏ ɪɴQᴜɪʀɪᴇꜱ, Qᴜᴇꜱᴛɪᴏɴꜱ!!</div>
+      </div>
 
-    <a class="link-btn" id="social3" href="https://pinterest.com/obscura001" target="_blank">
-      <i class="fab fa-pinterest" id="icon3"></i>Pinterest
-      <input type="color" class="edit-color" id="color3" title="Change color">
-    </a>
-    <div class="text-block" contenteditable="false" id="text3">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
-  </div>
+      <div class="social-group">
+        <a class="link-btn" href="https://pinterest.com/obscura001" target="_blank">
+          <i class="fab fa-pinterest"></i> Pinterest
+        </a>
+        <div class="text-block">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
+      </div>
 
-  <div class="side-wrap">
+    </div>
+
     <img id="rightImg" class="side-img">
-    <div class="resize-handle" id="rightHandle"></div>
+
   </div>
 </div>
 
-<div id="uploadBox">Upload Extra Image</div>
-<button id="editBtn">Enable Edit Mode</button>
+<div id="uploadBox">upload image</div>
+<button id="editBtn">edit</button>
 
 <script>
-let editMode=false;
 const PASSWORD="obs001edit";
+let edit=false;
 
 const cover=document.getElementById("cover");
 const leftImg=document.getElementById("leftImg");
 const rightImg=document.getElementById("rightImg");
-const coverHandle=document.getElementById("coverHandle");
-const leftHandle=document.getElementById("leftHandle");
-const rightHandle=document.getElementById("rightHandle");
-const coverInput=document.getElementById("coverInput");
-const leftInput=document.getElementById("leftInput");
-const rightInput=document.getElementById("rightInput");
-const extraInput=document.getElementById("extraInput");
-const uploadBox=document.getElementById("uploadBox");
 
-function enableEditMode(){
-  editMode=true;
-  document.querySelectorAll("[contenteditable]").forEach(e=>e.contentEditable=true);
-  document.querySelectorAll(".resize-handle").forEach(h=>h.style.display="block");
-  document.querySelectorAll(".edit-color").forEach(e=>e.style.display="inline-block");
-  uploadBox.style.display="block";
-  cover.onclick=()=>coverInput.click();
-  leftImg.onclick=()=>leftInput.click();
-  rightImg.onclick=()=>rightInput.click();
-  document.querySelectorAll(".link-btn").forEach(btn=>makeDraggable(btn));
-}
 document.getElementById("editBtn").onclick=()=>{
-  const pass=prompt("Enter edit password");
-  if(pass===PASSWORD){enableEditMode();alert("Edit mode unlocked 🖤");}else alert("Wrong password");
+  if(prompt("password")===PASSWORD){
+    edit=true;
+    document.getElementById("uploadBox").style.display="block";
+    alert("edit mode on");
+  }
 };
 
-/* UPLOAD IMAGES */
-function upload(input,img){
+function upload(input,target){
   input.onchange=e=>{
-    const reader=new FileReader();
-    reader.onload=()=>{
-      if(img){ img.src=reader.result; img.classList.add("loaded"); localStorage[img.id]=reader.result; }
-      else addExtraImage(reader.result);
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
-}
-upload(coverInput,cover);
-upload(leftInput,leftImg);
-upload(rightInput,rightImg);
-upload(extraInput,null);
-uploadBox.onclick=()=>extraInput.click();
-
-/* ADD EXTRA IMAGE */
-function addExtraImage(src){
-  const img=document.createElement("img");
-  img.src=src;
-  img.className="side-img loaded";
-  img.style.left="50px";
-  img.style.top="50px";
-  const handle=document.createElement("div");
-  handle.className="resize-handle";
-  document.body.appendChild(img);
-  document.body.appendChild(handle);
-  makeDraggable(img);
-  makeResizable(img,handle);
+    const r=new FileReader();
+    r.onload=()=>target.src=r.result;
+    r.readAsDataURL(e.target.files[0]);
+  }
 }
 
-/* DRAG */
-function makeDraggable(el){
-  el.onmousedown=function(e){
-    if(!editMode) return;
-    let shiftX=e.clientX-el.getBoundingClientRect().left;
-    let shiftY=e.clientY-el.getBoundingClientRect().top;
-    function moveAt(pageX,pageY){
-      el.style.position="absolute";
-      el.style.left=pageX-shiftX+"px";
-      el.style.top=pageY-shiftY+"px";
-      el.style.zIndex=1000;
-    }
-    function onMouseMove(e){ moveAt(e.pageX,e.pageY); }
-    document.addEventListener('mousemove',onMouseMove);
-    document.onmouseup=function(){
-      document.removeEventListener('mousemove',onMouseMove);
-      document.onmouseup=null;
-      localStorage[el.id+'Left']=el.style.left;
-      localStorage[el.id+'Top']=el.style.top;
-    };
-  };
-  el.ondragstart=()=>false;
-}
+upload(document.getElementById("leftInput"),leftImg);
+upload(document.getElementById("rightInput"),rightImg);
 
-/* RESIZE BOTH WIDTH & HEIGHT */
-function makeResizable(el,handle){
-  handle.onmousedown=function(e){
-    if(!editMode){return;}
-    e.preventDefault();
-    const startX=e.clientX;
-    const startY=e.clientY;
-    const startWidth=el.offsetWidth;
-    const startHeight=el.offsetHeight;
-    document.onmousemove=function(e){
-      const newWidth=startWidth+(e.clientX-startX);
-      const newHeight=startHeight+(e.clientY-startY);
-      el.style.width=newWidth+"px";
-      el.style.height=newHeight+"px";
-    };
-    document.onmouseup=function(){
-      document.onmousemove=null;
-      document.onmouseup=null;
-      localStorage[el.id+'Width']=el.style.width;
-      localStorage[el.id+'Height']=el.style.height;
-    };
-  };
-}
+cover.onclick=()=>edit && document.getElementById("coverInput").click();
+leftImg.onclick=()=>edit && document.getElementById("leftInput").click();
+rightImg.onclick=()=>edit && document.getElementById("rightInput").click();
 
-/* SOCIAL COLOR EDIT */
-function editSocialColor(inputEl, iconEl){
-  inputEl.oninput = ()=>{ iconEl.style.color = inputEl.value; };
-}
-
-/* INITIALIZE */
-makeDraggable(leftImg);
-makeDraggable(rightImg);
-makeDraggable(cover);
-makeResizable(leftImg,leftHandle);
-makeResizable(rightImg,rightHandle);
-makeResizable(cover,coverHandle);
-
-/* APPLY COLOR EDITS */
-editSocialColor(document.getElementById("color1"), document.getElementById("icon1"));
-editSocialColor(document.getElementById("color2"), document.getElementById("icon2"));
-editSocialColor(document.getElementById("color3"), document.getElementById("icon3"));
-
-/* RESTORE SAVED DATA */
-window.onload=()=>{
-  if(localStorage.cover){ cover.style.backgroundImage=`url(${localStorage.cover})`; cover.innerHTML=""; }
-  if(localStorage.leftImg){ leftImg.src=localStorage.leftImg; leftImg.classList.add("loaded"); }
-  if(localStorage.rightImg){ rightImg.src=localStorage.rightImg; rightImg.classList.add("loaded"); }
-  if(localStorage.leftImg+'Width' in localStorage){ leftImg.style.width=localStorage[leftImg.id+'Width']; leftImg.style.height=localStorage[leftImg.id+'Height']; }
-  if(localStorage.rightImg+'Width' in localStorage){ rightImg.style.width=localStorage[rightImg.id+'Width']; rightImg.style.height=localStorage[rightImg.id+'Height']; }
-  if(localStorage.cover+'Width' in localStorage){ cover.style.height=localStorage[cover.id+'Height']; }
+document.getElementById("coverInput").onchange=e=>{
+  const r=new FileReader();
+  r.onload=()=>{cover.style.backgroundImage=`url(${r.result})`;cover.innerHTML=""};
+  r.readAsDataURL(e.target.files[0]);
 };
 </script>
+
 </body>
 </html>
+
+
+
 
 
 
