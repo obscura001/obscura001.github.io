@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>✦ Obscura 001 hub ✦</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -12,8 +11,8 @@
 body{
   margin:0;
   min-height:100vh;
-  font-family: "Times New Roman", serif;
-  background: radial-gradient(circle at center, #111 0%, #000 70%);
+  font-family:"Times New Roman", serif;
+  background:radial-gradient(circle at center,#111 0%,#000 70%);
   color:white;
   overflow-x:hidden;
 }
@@ -26,15 +25,15 @@ h1{
   letter-spacing:0.12em;
 }
 
-/* CENTER COLUMN (PROTECTS FROM IMAGES) */
+/* CENTER COLUMN */
 .social-column{
   max-width:460px;
   margin:0 auto;
   position:relative;
-  z-index:3;
+  z-index:5;
 }
 
-/* SOCIAL GROUP */
+/* SOCIAL BLOCK */
 .social-group{
   margin-bottom:38px;
   text-align:center;
@@ -45,22 +44,16 @@ h1{
   display:flex;
   align-items:center;
   justify-content:flex-start;
-
   width:420px;
   height:64px;
-
   margin:0 auto;
   padding:0 22px;
-
   background:white;
   color:black;
   text-decoration:none;
-
   border-radius:40px;
   font-size:18px;
   font-weight:600;
-
-  cursor:pointer;
 }
 
 .link-btn i{
@@ -68,7 +61,7 @@ h1{
   margin-right:16px;
 }
 
-/* TEXT UNDER BUTTON */
+/* TEXT */
 .text-block{
   margin-top:10px;
   font-size:15px;
@@ -77,35 +70,65 @@ h1{
 }
 
 /* SIDE IMAGES */
-.side-image{
+.edit-image{
   position:absolute;
   top:160px;
   width:260px;
-  z-index:1;
+  cursor:move;
+  z-index:2;
 }
 
-.side-image img{
+.left{ left:40px; }
+.right{ right:40px; }
+
+.edit-image img{
   width:100%;
   height:auto;
   display:block;
 }
 
-.left{
-  left:40px;
+/* RESIZE HANDLE */
+.resize{
+  width:14px;
+  height:14px;
+  background:white;
+  position:absolute;
+  right:-7px;
+  bottom:-7px;
+  cursor:se-resize;
+  display:none;
 }
 
-.right{
-  right:40px;
+/* EDIT MODE */
+.editing .resize,
+.editing .upload-box{
+  display:block;
+}
+
+/* UPLOAD BOX */
+.upload-box{
+  display:none;
+  margin:10px auto 0;
+  width:160px;
+}
+
+/* EDIT BUTTON */
+#editBtn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#111;
+  color:white;
+  padding:10px 14px;
+  border:1px solid #555;
+  cursor:pointer;
+  z-index:999;
 }
 
 /* MOBILE */
 @media(max-width:900px){
-  .side-image{
-    display:none;
-  }
-  .link-btn{
-    width:90%;
-  }
+  .edit-image{ display:none; }
+  .link-btn{ width:90%; }
 }
 </style>
 </head>
@@ -114,13 +137,18 @@ h1{
 
 <h1>✦ 𝔒𝔟𝔰𝔠𝔲𝔯𝔞 001 𝔥𝔲𝔟 ✦</h1>
 
-<!-- SIDE IMAGES -->
-<div class="side-image left">
-  <img src="left.jpg" alt="">
+<!-- LEFT IMAGE -->
+<div class="edit-image left" id="imgL">
+  <img src="left.jpg">
+  <div class="resize"></div>
+  <input type="file" class="upload-box">
 </div>
 
-<div class="side-image right">
-  <img src="right.jpg" alt="">
+<!-- RIGHT IMAGE -->
+<div class="edit-image right" id="imgR">
+  <img src="right.jpg">
+  <div class="resize"></div>
+  <input type="file" class="upload-box">
 </div>
 
 <!-- SOCIALS -->
@@ -148,6 +176,56 @@ h1{
   </div>
 
 </div>
+
+<div id="editBtn">edit</div>
+
+<script>
+let editing=false;
+document.getElementById("editBtn").onclick=()=>{
+  if(!editing){
+    if(prompt("Password:")!=="obs001edit") return;
+    document.body.classList.add("editing");
+    editing=true;
+  }else{
+    document.body.classList.remove("editing");
+    editing=false;
+  }
+};
+
+document.querySelectorAll(".edit-image").forEach(box=>{
+  let img=box.querySelector("img");
+  let resize=box.querySelector(".resize");
+  let upload=box.querySelector(".upload-box");
+
+  box.onmousedown=e=>{
+    if(!editing||e.target===resize) return;
+    let ox=e.clientX-box.offsetLeft;
+    let oy=e.clientY-box.offsetTop;
+    document.onmousemove=m=>{
+      box.style.left=(m.clientX-ox)+"px";
+      box.style.top=(m.clientY-oy)+"px";
+    };
+    document.onmouseup=()=>document.onmousemove=null;
+  };
+
+  resize.onmousedown=e=>{
+    e.stopPropagation();
+    let w=box.offsetWidth;
+    let h=box.offsetHeight;
+    let x=e.clientX,y=e.clientY;
+    document.onmousemove=m=>{
+      box.style.width=(w+m.clientX-x)+"px";
+    };
+    document.onmouseup=()=>document.onmousemove=null;
+  };
+
+  upload.onchange=e=>{
+    let r=new FileReader();
+    r.onload=()=>img.src=r.result;
+    r.readAsDataURL(e.target.files[0]);
+  };
+});
+</script>
 
 </body>
 </html>
