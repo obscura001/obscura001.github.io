@@ -102,7 +102,7 @@ h1{
   color:#cfcfcf;
 }
 
-/* SIDE IMAGES */
+/* SIDE + EXTRA IMAGES */
 .edit-image{
   position:absolute;
   top:220px;
@@ -139,11 +139,19 @@ h1{
   width:160px;
 }
 
+/* SMALL EXTRA UPLOAD */
+.small-upload-box{
+  display:none;
+  margin:60px auto;
+  text-align:center;
+}
+
 /* EDIT MODE */
 .editing .resize,
 .editing .upload-box,
 .editing .cover input,
-.editing .icon-color{
+.editing .icon-color,
+.editing .small-upload-box{
   display:block;
 }
 
@@ -219,12 +227,12 @@ h1{
     <input type="color" class="icon-color">
     <div class="text-block">ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!!</div>
   </div>
-<!-- SMALL EDIT UPLOAD -->
-<div class="small-upload-box">
-  <img id="smallImg" src="small-placeholder.png" alt="Small Image">
-  <input type="file" class="upload-box">
+
 </div>
 
+<!-- SMALL EXTRA IMAGE UPLOAD -->
+<div class="small-upload-box">
+  <input type="file" id="extraUpload">
 </div>
 
 <div id="editBtn">edit</div>
@@ -242,7 +250,7 @@ document.getElementById("editBtn").onclick=()=>{
   }
 };
 
-/* COVER UPLOAD */
+/* COVER */
 document.getElementById("coverUpload").onchange=e=>{
   let r=new FileReader();
   r.onload=()=>document.getElementById("coverImg").src=r.result;
@@ -256,19 +264,46 @@ document.querySelectorAll(".social-group").forEach(group=>{
   picker.oninput=()=>icon.style.color=picker.value;
 });
 
-/* IMAGE MOVE + RESIZE */
+/* SIDE IMAGES */
 document.querySelectorAll(".edit-image").forEach(box=>{
-  let img=box.querySelector("img");
+  enableEdit(box);
+});
+
+/* EXTRA IMAGES */
+const saved=JSON.parse(localStorage.getItem("extraImages")||"[]");
+saved.forEach(d=>createExtra(d));
+
+document.getElementById("extraUpload").onchange=e=>{
+  let r=new FileReader();
+  r.onload=()=>{
+    createExtra({src:r.result,left:"120px",top:"420px",width:"220px"});
+    saveExtras();
+  };
+  r.readAsDataURL(e.target.files[0]);
+};
+
+function createExtra(d){
+  let box=document.createElement("div");
+  box.className="edit-image extra-image";
+  box.style.left=d.left;
+  box.style.top=d.top;
+  box.style.width=d.width;
+  box.innerHTML=`<img src="${d.src}"><div class="resize"></div>`;
+  document.body.appendChild(box);
+  enableEdit(box);
+}
+
+function enableEdit(box){
   let resize=box.querySelector(".resize");
-  let upload=box.querySelector(".upload-box");
 
   box.onmousedown=e=>{
     if(!editing||e.target===resize) return;
     let ox=e.clientX-box.offsetLeft;
     let oy=e.clientY-box.offsetTop;
     document.onmousemove=m=>{
-      box.style.left=(m.clientX-ox)+"px";
-      box.style.top=(m.clientY-oy)+"px";
+      box.style.left=m.clientX-ox+"px";
+      box.style.top=m.clientY-oy+"px";
+      saveExtras();
     };
     document.onmouseup=()=>document.onmousemove=null;
   };
@@ -278,21 +313,39 @@ document.querySelectorAll(".edit-image").forEach(box=>{
     let w=box.offsetWidth;
     let x=e.clientX;
     document.onmousemove=m=>{
-      box.style.width=(w+m.clientX-x)+"px";
+      box.style.width=w+(m.clientX-x)+"px";
+      saveExtras();
     };
     document.onmouseup=()=>document.onmousemove=null;
   };
 
-  upload.onchange=e=>{
-    let r=new FileReader();
-    r.onload=()=>img.src=r.result;
-    r.readAsDataURL(e.target.files[0]);
-  };
-});
+  let upload=box.querySelector(".upload-box");
+  if(upload){
+    upload.onchange=e=>{
+      let r=new FileReader();
+      r.onload=()=>box.querySelector("img").src=r.result;
+      r.readAsDataURL(e.target.files[0]);
+    };
+  }
+}
+
+function saveExtras(){
+  let data=[];
+  document.querySelectorAll(".extra-image").forEach(b=>{
+    data.push({
+      src:b.querySelector("img").src,
+      left:b.style.left,
+      top:b.style.top,
+      width:b.style.width
+    });
+  });
+  localStorage.setItem("extraImages",JSON.stringify(data));
+}
 </script>
 
 </body>
 </html>
+
 
 
 
